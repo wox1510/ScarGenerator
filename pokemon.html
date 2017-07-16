@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Click the button to get a team.</h1>
+
+
+<button type="button" onclick="getPokemon()">Pokemon!</button><br>
+<p id="poke1"></p>
+<p id="poke2"></p>
+<p id="poke3"></p>
+<p id="poke4"></p>
+<p id="poke5"></p>
+<p id="poke6"></p>
+
+<script>
+function getPokemon()
+{
+
+var redo = "Y"
+
+var pokemonList = [
+["Bulbasaur","Grass", "Poison"],
+["Charmander","Fire", "Flying"],
+["Squirtle","Water","None"],
+["Caterpie","Bug","Flying"],
+["Weedle","Bug","Poison"],
+["Pidgey","Flying","Normal"],
+["Rattata","Normal","None"],
+["Alolan Rattata","Dark","Normal"],
+["Spearow","Flying","Normal"],
+["Ekans","Poison","None"],
+["Sandshrew","Ground","None"],
+["Alolan Sandshrew","Ice","Steel"],
+["Nidoran","Poison","Ground"],
+["Vulpix","Fire","None"],
+["Alolan Vulpix","Ice","Fairy"],
+["Zubat","Poison","Flying"],
+["Oddish","Grass","None"],
+["Paras","Bug","Grass"],
+["Venonat","Bug","Poison"],
+["Diglett","Ground","None"],
+["Alolan Diglett","Ground","Steel"],
+["Meowth","Normal","None"],
+["Alolan Meowth","Dark","None"],
+["Psyduck","Water","None"],
+["Mankey","Fighting","None"],
+["Growlithe","Fire","None"],
+["Poliwag","Water","None"],
+["Abra","Psychic","None"],
+["Machop","Fighting","None"],
+["Bellsprout","Grass", "Poison"],
+["Tentacool","Water", "Poison"],
+["Geodude","Rock", "Ground"],
+["Alolan Geodude","Rock", "Electric"],
+["Ponyta","Fire","None"],
+["Slowpoke","Water","Psychic"],
+["Magnemite","Electric","Steel"],
+["Farfetch'd","Normal","Flying"],
+["Doduo","Normal","Flying"],
+["Seel","Water","Ice"],
+["Grimer","Poison","None"],
+["Alolan Grimer","Poison","Dark"],
+["Shellder","Water","Ice"],
+["Gastly","Ghost","Poison"],
+["Onix","Steel","Ground"],
+["Drowzee","Psychic","None"],
+["Krabby","Water","None"],
+["Voltorb","Electric","None"],
+["Alolan Exeggcute","Grass","Dragon"],
+["Alolan Cubone","Fire","Ghost"],
+["Lickitung","Normal","None"],
+["Koffing","Poison","None"],
+["Rhyhorn","Rock", "Ground"],
+["Tangela","Grass","None"],
+["Kangaskhan","Normal","None"],
+["Horsea","Water","Dragon"],
+["Goldeen","Water","None"],
+["Staryu","Water","Psychic"],
+["Scyther","Bug","Steel"],
+["Pinsir","Bug","None"],
+["Tauros","Normal","None"],
+["Magikarp","Water","Flying"],
+["Lapras","Water","Ice"],
+["Eevee","None","None"],
+["Porygon","Normal","None"],
+["Omanyte","Rock","Water"],
+["Kabuto","Rock","Water"],
+["Aerodactyl","Rock","Flying"],
+["Dratini","Dragon","Flying"],
+["Chikorita","Grass","None"],
+["Cyndaquil","Fire","None"],
+["Totodile","Water","None"],
+["Sentret","Normal","None"],
+["Hoothoot","Normal","Flying"],
+["Ledyba","Bug","Flying"],
+["Spinarak","Bug","Poison"],
+["Chinchou","Water","Electic"],
+["Natu","Psychic","Flying"],
+["Mareep","Electric","None"],
+["Hoppip","Grass","Flying"],
+["Aipom","Normal","None"],
+["Sunkern","Grass","None"],
+["Yanma","Bug","Flying"],
+["Wooper","Water","Ground"],
+["Murkrow","Dark","Flying"],
+["Misdreavus","Ghost","None"],
+["Girafarig","Normal","Psychic"],
+["Pineco","Bug","Steel"],
+["Dunsparce","Normal","None"],
+["Gligar","Ground","Flying"],
+["Snubbull","Fairy","None"],
+["Qwilfish","Water","Poison"],
+["Shuckle","Bug","Rock"],
+["Heracross","Bug","Fighting"],
+["Sneasel","Dark","Ice"],
+["Teddiursa","Normal","None"],
+["Slugma","Fire","Rock"],
+["Swinub","Ice","Ground"],
+["Corsola","Water","Rock"],
+["Remoraid","Water","None"],
+["Delibird","Ice","Flying"],
+["Skarmory","Steel","Flying"],
+["Houndour","Dark","Fire"],
+["Phanpy","Gound","None"],
+["Stantler","Normal","None"],
+["Smeargle","Normal","None"],
+["Miltank","Normal","None"],
+["Larvitar","Rock","Dark"],
+["Treecko","Grass","None"],
+["Torchic","Fire","Fighting"],
+["Mudkip","Water","Ground"],
+["Poochyena","Dark","None"],
+["Zigzagoon","Normal","None"],
+["Wurmple","Bug","None"],
+["Lotad","Water","Grass"],
+["Seedot","Grass","Dark"],
+["Taillow","Normal","Flying"],
+["Wingull","Water","Flying"],
+["Ralts","Psychic","None"],
+["Surskit","Bug","Flying"],
+["Shroomish","Grass","Fighting"],
+["Slakoth","Normal","None"],
+["Nincada","Bug","Flying"],
+["Whismur","Normal","None"],
+["Makuhita","Fighting","None"],
+["Nosepass","Rock","Steel"],
+["Skitty","Normal","None"],
+["Sableye","Dark","Ghost"],
+["Mawile","Steel","Fairy"],
+["Aron","Steel","Rock"],
+["Meditite","Fighting","Psychic"],
+["Electrike","Electric","None"],
+["Plusle","Electric","None"],
+["Minun","Electric","None"],
+["Volbeat/Illumise","Bug","None"],
+["Gulpin","Poison","None"],
+["Carvanha","Water","Dark"],
+["Wailmer","Water","None"],
+["Numel","Fire","Ground"],
+["Torkoal","Fire","None"],
+["Spoink","Psychic","None"],
+["Spinda","Normal","None"],
+["Trapinch","Ground","Dragon"],
+["Cacnea","Grass","Dark"],
+["Swablu","Dragon","Flying"],
+["Zangoose","Normal","None"],
+["Seviper","Poison","None"],
+["Lunatone","Rock","Psychic"],
+["Solrock","Rock","Psychic"],
+["Barboach","Water","Ground"],
+["Corphish","Water","Dark"],
+["Baltoy","Ground","Psychic"],
+["Lileep","Rock","Grass"],
+["Anorith","Rock","Bug"],
+["Feebas","Water","None"],
+["Castform","Normal","None"],
+["Kecleon","Normal","None"],
+["Shuppet","Ghost","None"],
+["Duskull","Ghost","None"],
+["Tropius","Grass","Flying"],
+["Absol","Dark","None"],
+["Snorunt","Ice","None"],
+["Spheal","Ice","Water"],
+["Clamperl","Water","None"],
+["Relicanth","Water","Rock"],
+["Luvdisc","Water","None"],
+["Bagon","Dragon","Flying"],
+["Beldum","Steel","Psychic"],
+["Turtwig","Grass","Ground"],
+["Chimchar","Fire","Fighting"],
+["Piplup","Water","steel"],
+["Starly","Normal","Flying"],
+["Bidoof","Normal","Water"],
+["Kricketot","Bug","None"],
+["Budew","Grass","Poison"],
+["Shinx","Electric","None"],
+["Cranidos","Rock","None"],
+["Shieldon","Rock","Steel"],
+["Burmy","Bug","None"],
+["Combee","Bug","Flying"],
+["Pachirisu","Electric","None"],
+["Buizel","Water","None"],
+["Cherubi","Grass","None"],
+["Shellos","Water","None"],
+["Drifloon","Ghost","Flying"],
+["Buneary","Normal","None"],
+["Glameow","Normal","None"],
+["Stunky","Poison","Dark"],
+["Bronzor","Steel","Psychic"],
+["Chatot","Normal","Flying"],
+["Spiritomb","Ghost","Dark"],
+["Gible","Dragon","Ground"],
+["Hippopotas","Ground","None"],
+["Skorupi","Poison","Dark"],
+["Croagunk","Poison","Fighting"],
+["Carnivine","Grass","None"],
+["Finneon","Water","None"],
+["Snover","Grass","Ice"],
+["Rotom","Electric","None"],
+["Phione","Water","None"],
+["Snivy","Grass","None"],
+["Tepig","Fire","Fighting"],
+["Oshawott","Water","None"],
+["Patrat","Normal","None"],
+["Lillipup","Normal","None"],
+["Purrloin","Dark","None"],
+["Pansage","Grass","None"],
+["Pansear","Fire","None"],
+["Panpour","Water","None"],
+["Munna","Psychic","None"],
+["Pidove","Normal","Flying"],
+["Blitzle","Electric","None"],
+["Roggenrola","Rock","None"],
+["Woobat","Psychic","Flying"],
+["Drilbur","Ground","Steel"],
+["Audino","Normal","None"],
+["Timburr","Fighting","None"],
+["Tympole","Water","Ground"],
+["Throh","Fighting","None"],
+["Sawk","Fighting","None"],
+["Sewaddle","Bug","Grass"],
+["Venipede","Bug","Poison"],
+["Cottonee","Grass","Fairy"],
+["Petilil","Grass","None"],
+["Basculin","Water","None"],
+["Sandile","Ground","Dark"],
+["Darumaka","Fire","None"],
+["Maractus","Grass","None"],
+["Dwebble","Bug","Rock"],
+["Scraggy","Dark","Fighting"],
+["Sigilyph","Psychic","Flying"],
+["Yamask","Ghost","None"],
+["Tirtouga","Water","Rock"],
+["Archen","Rock","Flying"],
+["Trubbish","Poison","None"],
+["Zorua","Dark","None"],
+["Minccino","Normal","None"],
+["Gothita","Psychic","None"],
+["Solosis","Psychic","None"],
+["Ducklett","Water","Flying"],
+["Vanillite","Ice","None"],
+["Deerling","Normal","Grass"],
+["Emolga","Electric","Flying"],
+["Karrablast","Bug","Steel"],
+["Foongus","Grass","Poison"],
+["Frillish","Water","Ghost"],
+["Alomomola","Water","None"],
+["Joltik","Bug","Electric"],
+["Ferroseed","Grass","Steel"],
+["Klink","Steel","None"],
+["Tynamo","Electric","None"],
+["Elgyem","Psychich","None"],
+["Litwick","Ghost","Fire"],
+["Axew","Dragon","None"],
+["Cubchoo","Ice","None"],
+["Cryogonal","Normal","None"],
+["Shelmet","Bug","None"],
+["Stunfisk","Ground","Electric"],
+["Mienfoo","Fighting","None"],
+["Druddigon","Dragon","None"],
+["Golett","Ground","Ghost"],
+["Pawniard","Dark","Steel"],
+["Bouffalant","Normal","None"],
+["Rufflet","Normal","Flying"],
+["Vullaby","Dark","Flying"],
+["Heatmor","Fire","None"],
+["Durant","Bug","Steel"],
+["Deino","Dark","Dragon"],
+["Larvesta","Bug","Fire"],
+["Chespin","Grass","Fighting"],
+["Fennekin","Fire","Psychich"],
+["Froakie","Water","Dark"],
+["Bunnelby","Normal","Ground"],
+["Fletchling","Fire","Flying"],
+["Scatterbug","Bug","Flying"],
+["Litleo","Fire","Normal"],
+["Flabébé","Fairy","None"],
+["Skiddo","Grass","None"],
+["Pancham","Fighting","Dark"],
+["Furfrou","Normal","None"],
+["Espurr","Psychic","None"],
+["Honedge","Steel","Ghost"],
+["Spritzee","Fairy","None"],
+["Swirlix","Fairy","None"],
+["Inkay","Dark","Psychic"],
+["Binacle","Rock","Water"],
+["Skrelp","Poison","Dragon"],
+["Clauncher","Water","None"],
+["Helioptile","Electric","Normal"],
+["Tyrunt","Rock","Dragon"],
+["Amaura","Rock","Ice"],
+["Hawlucha","Fighting","Flying"],
+["Dedenne","Electric","Fairy"],
+["Carbink","Rock","Fairy"],
+["Goomy","Dragon","None"],
+["Klefki","Steel","Fairy"],
+["Phantump","Ghost","Grass"],
+["Pumpkaboo","Ghost","Grass"],
+["Bergmite","Ice","None"],
+["Noibat","Flying","Dragon"],
+["Azurill","Water","Fairy"],
+["Bonsly","Rock","None"],
+["Chingling","Psychic","None"],
+["Cleffa","Fairy","None"],
+["Elekid","Electric","None"],
+["Happiny","Normal","None"],
+["Igglybuff","Normal","Fairy"],
+["Magby","Fire","None"],
+["Mantyke","Water","Flying"],
+["Mime Jr.","Psychic","Fairy"],
+["Munchlax","Normal","None"],
+["Alolan Pichu","Electric","Psychic"],
+["Riolu","Fighting","Steel"],
+["Smoochum","Ice","Psychic"],
+["Togepi","Fairy","Flying"],
+["Tyrogue","Fighting","None"],
+["Rowlet","Grass","Ghost"],
+["Wynaut","Psychic","None"],
+["Litten","Fire","Dark"],
+["Popplio","Water","Fairy"],
+["Pikipek","Normal","Flying"],
+["Yungoos","Normal","None"],
+["Grubbin","Bug","Electric"],
+["Crabrawler","Fighting","Ice"],
+["Oricrio","Flying","None"],
+["Cutiefly","Bug","Fairy"],
+["Rockruff","Rock","None"],
+["Wishiwashi","Water","None"],
+["Mareanie","Poison","Water"],
+["Mudbray","Ground","None"],
+["Dewpider","Water","Bug"],
+["Fomantis","Grass","None"],
+["Morelull","Grass","Fairy"],
+["Salandit","Poison","Fire"],
+["Stufful","Normal","Fighting"],
+["Bounsweet","Grass","None"],
+["Comfey","Fairy","None"],
+["Oranguru","Normal","Psychic"],
+["Passimian","Fighting","None"],
+["Wimpod","Bug","Water"],
+["Sandygast","Ghost","Ground"],
+["Pyukumuku","Water","None"],
+["Minior","Rock","Flying"],
+["Komala","Normal","None"],
+["Turtonator","Fire","Dragon"],
+["Togedemaru","Electric","Steel"],
+["Mimikyu","Ghost","Fairy"],
+["Bruxish","Water","Psychic"],
+["Drampa","Normal","Dragon"],
+["Dhelmise","Ghost","Grass"],
+["Jangmo-o","Dragon","Fighting"]
+];
+
+var redo ="Y";
+while (redo == "Y") {
+	redo = "N";
+	var pokemon1 = Math.floor((Math.random()*pokemonList.length));
+	var pokemon2 = Math.floor((Math.random()*pokemonList.length));
+	var pokemon3 = Math.floor((Math.random()*pokemonList.length));
+	var pokemon4 = Math.floor((Math.random()*pokemonList.length));
+	var pokemon5 = Math.floor((Math.random()*pokemonList.length));
+	var pokemon6 = Math.floor((Math.random()*pokemonList.length));
+
+	while  (
+	       ("None" != pokemonList[pokemon1][1] && "None" != pokemonList[pokemon2][1] && pokemonList[pokemon1][1] == pokemonList[pokemon2][1]) ||
+	       ("None" != pokemonList[pokemon1][1] && "None" != pokemonList[pokemon2][2] && pokemonList[pokemon1][1] == pokemonList[pokemon2][2]) ||
+	       ("None" != pokemonList[pokemon1][2] && "None" != pokemonList[pokemon2][1] && pokemonList[pokemon1][2] == pokemonList[pokemon2][1]) ||
+	       ("None" != pokemonList[pokemon1][2] && "None" != pokemonList[pokemon2][2] && pokemonList[pokemon1][2] == pokemonList[pokemon2][2])
+	       )
+	{
+	 pokemon2 = Math.floor((Math.random()*pokemonList.length));
+	}
+
+	while  (
+	       ("None" != pokemonList[pokemon1][1] && "None" != pokemonList[pokemon3][1] && pokemonList[pokemon1][1] == pokemonList[pokemon3][1]) ||
+	       ("None" != pokemonList[pokemon1][1] && "None" != pokemonList[pokemon3][2] && pokemonList[pokemon1][1] == pokemonList[pokemon3][2]) ||
+	       ("None" != pokemonList[pokemon1][2] && "None" != pokemonList[pokemon3][1] && pokemonList[pokemon1][2] == pokemonList[pokemon3][1]) ||
+	       ("None" != pokemonList[pokemon1][2] && "None" != pokemonList[pokemon3][2] && pokemonList[pokemon1][2] == pokemonList[pokemon3][2]) ||
+	       ("None" != pokemonList[pokemon2][1] && "None" != pokemonList[pokemon3][1] && pokemonList[pokemon2][1] == pokemonList[pokemon3][1]) ||
+		   ("None" != pokemonList[pokemon2][1] && "None" != pokemonList[pokemon3][2] && pokemonList[pokemon2][1] == pokemonList[pokemon3][2]) ||
+		   ("None" != pokemonList[pokemon2][2] && "None" != pokemonList[pokemon3][1] && pokemonList[pokemon2][2] == pokemonList[pokemon3][1]) ||
+	       ("None" != pokemonList[pokemon2][2] && "None" != pokemonList[pokemon3][2] && pokemonList[pokemon2][2] == pokemonList[pokemon3][2])
+	       )
+	{
+	 pokemon3 = Math.floor((Math.random()*pokemonList.length));
+	}
+	while  (
+		       ("None" != pokemonList[pokemon1][1] && "None" != pokemonList[pokemon4][1] && pokemonList[pokemon1][1] == pokemonList[pokemon4][1]) ||
+		       ("None" != pokemonList[pokemon1][1] && "None" != pokemonList[pokemon4][2] && pokemonList[pokemon1][1] == pokemonList[pokemon4][2]) ||
+		       ("None" != pokemonList[pokemon1][2] && "None" != pokemonList[pokemon4][1] && pokemonList[pokemon1][2] == pokemonList[pokemon4][1]) ||
+		       ("None" != pokemonList[pokemon1][2] && "None" != pokemonList[pokemon4][2] && pokemonList[pokemon1][2] == pokemonList[pokemon4][2]) ||
+		       ("None" != pokemonList[pokemon2][1] && "None" != pokemonList[pokemon4][1] && pokemonList[pokemon2][1] == pokemonList[pokemon4][1]) ||
+			   ("None" != pokemonList[pokemon2][1] && "None" != pokemonList[pokemon4][2] && pokemonList[pokemon2][1] == pokemonList[pokemon4][2]) ||
+			   ("None" != pokemonList[pokemon2][2] && "None" != pokemonList[pokemon4][1] && pokemonList[pokemon2][2] == pokemonList[pokemon4][1]) ||
+		       ("None" != pokemonList[pokemon2][2] && "None" != pokemonList[pokemon4][2] && pokemonList[pokemon2][2] == pokemonList[pokemon4][2]) ||
+		       ("None" != pokemonList[pokemon3][1] && "None" != pokemonList[pokemon4][1] && pokemonList[pokemon3][1] == pokemonList[pokemon4][1]) ||
+			   ("None" != pokemonList[pokemon3][1] && "None" != pokemonList[pokemon4][2] && pokemonList[pokemon3][1] == pokemonList[pokemon4][2]) ||
+			   ("None" != pokemonList[pokemon3][2] && "None" != pokemonList[pokemon4][1] && pokemonList[pokemon3][2] == pokemonList[pokemon4][1]) ||
+		       ("None" != pokemonList[pokemon3][2] && "None" != pokemonList[pokemon4][2] && pokemonList[pokemon3][2] == pokemonList[pokemon4][2])
+	       )
+	{
+	 pokemon4 = Math.floor((Math.random()*pokemonList.length));
+	}
+	while  (
+			   ("None" != pokemonList[pokemon1][1] && "None" != pokemonList[pokemon5][1] && pokemonList[pokemon1][1] == pokemonList[pokemon5][1]) ||
+			   ("None" != pokemonList[pokemon1][1] && "None" != pokemonList[pokemon5][2] && pokemonList[pokemon1][1] == pokemonList[pokemon5][2]) ||
+			   ("None" != pokemonList[pokemon1][2] && "None" != pokemonList[pokemon5][1] && pokemonList[pokemon1][2] == pokemonList[pokemon5][1]) ||
+			   ("None" != pokemonList[pokemon1][2] && "None" != pokemonList[pokemon5][2] && pokemonList[pokemon1][2] == pokemonList[pokemon5][2]) ||
+			   ("None" != pokemonList[pokemon2][1] && "None" != pokemonList[pokemon5][1] && pokemonList[pokemon2][1] == pokemonList[pokemon5][1]) ||
+			   ("None" != pokemonList[pokemon2][1] && "None" != pokemonList[pokemon5][2] && pokemonList[pokemon2][1] == pokemonList[pokemon5][2]) ||
+			   ("None" != pokemonList[pokemon2][2] && "None" != pokemonList[pokemon5][1] && pokemonList[pokemon2][2] == pokemonList[pokemon5][1]) ||
+			   ("None" != pokemonList[pokemon2][2] && "None" != pokemonList[pokemon5][2] && pokemonList[pokemon2][2] == pokemonList[pokemon5][2]) ||
+			   ("None" != pokemonList[pokemon3][1] && "None" != pokemonList[pokemon5][1] && pokemonList[pokemon3][1] == pokemonList[pokemon5][1]) ||
+			   ("None" != pokemonList[pokemon3][1] && "None" != pokemonList[pokemon5][2] && pokemonList[pokemon3][1] == pokemonList[pokemon5][2]) ||
+			   ("None" != pokemonList[pokemon3][2] && "None" != pokemonList[pokemon5][1] && pokemonList[pokemon3][2] == pokemonList[pokemon5][1]) ||
+			   ("None" != pokemonList[pokemon3][2] && "None" != pokemonList[pokemon5][2] && pokemonList[pokemon3][2] == pokemonList[pokemon5][2]) ||
+			   ("None" != pokemonList[pokemon4][1] && "None" != pokemonList[pokemon5][1] && pokemonList[pokemon4][1] == pokemonList[pokemon5][1]) ||
+			   ("None" != pokemonList[pokemon4][1] && "None" != pokemonList[pokemon5][2] && pokemonList[pokemon4][1] == pokemonList[pokemon5][2]) ||
+			   ("None" != pokemonList[pokemon4][2] && "None" != pokemonList[pokemon5][1] && pokemonList[pokemon4][2] == pokemonList[pokemon5][1]) ||
+			   ("None" != pokemonList[pokemon4][2] && "None" != pokemonList[pokemon5][2] && pokemonList[pokemon4][2] == pokemonList[pokemon5][2])
+	   )
+	{
+	 pokemon5 = Math.floor((Math.random()*pokemonList.length));
+	}
+	while  (
+			   ("None" != pokemonList[pokemon1][1] && "None" != pokemonList[pokemon6][1] && pokemonList[pokemon1][1] == pokemonList[pokemon6][1]) ||
+			   ("None" != pokemonList[pokemon1][1] && "None" != pokemonList[pokemon6][2] && pokemonList[pokemon1][1] == pokemonList[pokemon6][2]) ||
+			   ("None" != pokemonList[pokemon1][2] && "None" != pokemonList[pokemon6][1] && pokemonList[pokemon1][2] == pokemonList[pokemon6][1]) ||
+			   ("None" != pokemonList[pokemon1][2] && "None" != pokemonList[pokemon6][2] && pokemonList[pokemon1][2] == pokemonList[pokemon6][2]) ||
+			   ("None" != pokemonList[pokemon2][1] && "None" != pokemonList[pokemon6][1] && pokemonList[pokemon2][1] == pokemonList[pokemon6][1]) ||
+			   ("None" != pokemonList[pokemon2][1] && "None" != pokemonList[pokemon6][2] && pokemonList[pokemon2][1] == pokemonList[pokemon6][2]) ||
+			   ("None" != pokemonList[pokemon2][2] && "None" != pokemonList[pokemon6][1] && pokemonList[pokemon2][2] == pokemonList[pokemon6][1]) ||
+			   ("None" != pokemonList[pokemon2][2] && "None" != pokemonList[pokemon6][2] && pokemonList[pokemon2][2] == pokemonList[pokemon6][2]) ||
+			   ("None" != pokemonList[pokemon3][1] && "None" != pokemonList[pokemon6][1] && pokemonList[pokemon3][1] == pokemonList[pokemon6][1]) ||
+			   ("None" != pokemonList[pokemon3][1] && "None" != pokemonList[pokemon6][2] && pokemonList[pokemon3][1] == pokemonList[pokemon6][2]) ||
+			   ("None" != pokemonList[pokemon3][2] && "None" != pokemonList[pokemon6][1] && pokemonList[pokemon3][2] == pokemonList[pokemon6][1]) ||
+			   ("None" != pokemonList[pokemon3][2] && "None" != pokemonList[pokemon6][2] && pokemonList[pokemon3][2] == pokemonList[pokemon6][2]) ||
+			   ("None" != pokemonList[pokemon4][1] && "None" != pokemonList[pokemon6][1] && pokemonList[pokemon4][1] == pokemonList[pokemon6][1]) ||
+			   ("None" != pokemonList[pokemon4][1] && "None" != pokemonList[pokemon6][2] && pokemonList[pokemon4][1] == pokemonList[pokemon6][2]) ||
+			   ("None" != pokemonList[pokemon4][2] && "None" != pokemonList[pokemon6][1] && pokemonList[pokemon4][2] == pokemonList[pokemon6][1]) ||
+			   ("None" != pokemonList[pokemon4][2] && "None" != pokemonList[pokemon6][2] && pokemonList[pokemon4][2] == pokemonList[pokemon6][2]) ||
+			   ("None" != pokemonList[pokemon5][1] && "None" != pokemonList[pokemon6][1] && pokemonList[pokemon5][1] == pokemonList[pokemon6][1]) ||
+			   ("None" != pokemonList[pokemon5][1] && "None" != pokemonList[pokemon6][2] && pokemonList[pokemon5][1] == pokemonList[pokemon6][2]) ||
+			   ("None" != pokemonList[pokemon5][2] && "None" != pokemonList[pokemon6][1] && pokemonList[pokemon5][2] == pokemonList[pokemon6][1]) ||
+			   ("None" != pokemonList[pokemon5][2] && "None" != pokemonList[pokemon6][2] && pokemonList[pokemon5][2] == pokemonList[pokemon6][2])
+	   )
+	{
+	 pokemon6 = Math.floor((Math.random()*pokemonList.length));
+	}
+
+
+	if (redo == "N") {
+	 var poketext1=document.getElementById("poke1");
+	 var poketext2=document.getElementById("poke2");
+	 var poketext3=document.getElementById("poke3");
+	 var poketext4=document.getElementById("poke4");
+	 var poketext5=document.getElementById("poke5");
+	 var poketext6=document.getElementById("poke6");
+
+ 	poketext1.innerHTML = pokemonList[pokemon1][0].concat(" (").concat(pokemonList[pokemon1][1]).concat(", ").concat(pokemonList[pokemon1][2]).concat(")");
+ 	poketext2.innerHTML = pokemonList[pokemon2][0].concat(" (").concat(pokemonList[pokemon2][1]).concat(", ").concat(pokemonList[pokemon2][2]).concat(")");
+ 	poketext3.innerHTML = pokemonList[pokemon3][0].concat(" (").concat(pokemonList[pokemon3][1]).concat(", ").concat(pokemonList[pokemon3][2]).concat(")");
+ 	poketext4.innerHTML = pokemonList[pokemon4][0].concat(" (").concat(pokemonList[pokemon4][1]).concat(", ").concat(pokemonList[pokemon4][2]).concat(")");
+ 	poketext5.innerHTML = pokemonList[pokemon5][0].concat(" (").concat(pokemonList[pokemon5][1]).concat(", ").concat(pokemonList[pokemon5][2]).concat(")");
+ 	poketext6.innerHTML = pokemonList[pokemon6][0].concat(" (").concat(pokemonList[pokemon6][1]).concat(", ").concat(pokemonList[pokemon6][2]).concat(")");
+	}
+
+
+ }
+
+
+}
+</script>
+
+</body>
+</html>
