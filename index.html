@@ -37,7 +37,7 @@ function drawTable()
 	 var cardImage = document.createElement('img');
 	 
 	 var cardImageLink
-	 if (card.content.card_faces) {
+	 if (card.content.layout == 'transform' || card.content.layout == 'modal_dfc' || card.content.layout == 'reversible_card') {
 	   if (card.status == "ShownBack") {
 	    cardImageLink = card.content.card_faces[1].image_uris.normal;
 	   } else {
@@ -97,7 +97,7 @@ function drawTable()
 	if (card.status == "Hidden") {
 	  footerDiv.appendChild(revealButton);
 	} else if (card.status == "Shown") {
-	  if (card.content.card_faces) {
+	  if (card.content.layout == 'transform' || card.content.layout == 'modal_dfc'|| card.content.layout == 'reversible_card') {
 	   footerDiv.appendChild(showBackButton);
 	  } 
 	  footerDiv.appendChild(goneButton);
@@ -133,6 +133,7 @@ function drawTable()
 document.getElementById("cardButton").onclick=async() => {
   const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land');
   const cardContent = await response.json(); //extract JSON from the http response
+  console.log(cardContent);
   let card = {content: cardContent, status: "Hidden", id: cardId}
   cardId += 1;
   cards.push(card);
