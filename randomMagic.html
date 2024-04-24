@@ -129,7 +129,7 @@ function drawTable()
 }
 
 document.getElementById("cardButton").onclick=async() => {
-  const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land+is:transform');
+  const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land');
   const cardContent = await response.json(); //extract JSON from the http response
   console.log(cardContent);
   let card = {content: cardContent, status: "Hidden", id: cardId}
