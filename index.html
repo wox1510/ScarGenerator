@@ -3,17 +3,39 @@
 <body>
 
 <h1>Click the button to get a card.</h1>
-<button type="button" style="height:50px;width:100px" id=cardButton>Card!</button><br>
+<div>
+<button type="button" style="height:50px;width:100px" id=cardButton>Random Discord Card!</button>
+<button type="button" style="height:50px;width:100px" id=kamigawaButton>Kamigawa Pack!</button><br>
 <table id="cardTable" border="1">
 <br>
+<table id="boosterTable" border="1"><br>
+<table id="chooseTable" border="1"><br>
+<table id="libraryTable" border="1"><br>
+<table id="handTable" border="1"><br>
+<table id="battlefieldTable" border="1"><br>
+<table id="graveyardTable" border="1"><br>
+<table id="exileTable" border="1"><br>
 <button type="button" id=restoreButton>Restore</button><br>
 
 <script>
 let cards = []
 let cardId = 1;
+let kamigawaCards = []
+let kamigawaCardId = 1;
 let cardBackImage = "https://backs.scryfall.io/large/2/2/222b7a3b-2321-4d4c-af19-19338b134971.jpg?1677416389";
 
-function drawTable()
+function drawTables() {
+  drawCardsTable();
+  drawBoosterTable();
+  drawChooseTable();
+  drawLibraryTable();
+  drawHandTable();
+  drawBattlefieldTable();
+  drawGraveyardTable();
+  drawExileTable();
+}
+
+function drawCardsTable()
 {
   var table = document.getElementById('cardTable');
   var tableBody = document.createElement('tbody');
@@ -37,7 +59,7 @@ function drawTable()
 	 var cardImage = document.createElement('img');
 	 
 	 var cardImageLink
-	 if (card.content.layout == 'transform' || card.content.layout == 'modal_dfc' || card.content.layout == 'reversible_card') {
+	 if (card.content.card_faces && card.content.layout != "flip") {
 	   if (card.status == "ShownBack") {
 	    cardImageLink = card.content.card_faces[1].image_uris.normal;
 	   } else {
@@ -60,7 +82,7 @@ function drawTable()
 	revealButton.size="large";
   	revealButton.onclick = function (){
 	  cards.find(cardRevealed => cardRevealed.id == card.id).status = "Shown"
-  	  drawTable();
+  	  drawTables();
 	};
 	revealButton.setAttribute('style','height:50px;width:100px;');
 	
@@ -70,7 +92,7 @@ function drawTable()
 	goneButton.size="large";
   	goneButton.onclick = function (){
 	  cards.find(cardGone => cardGone.id == card.id).status = "Gone"
-  	  drawTable();
+  	  drawTables();
 	};
 	goneButton.setAttribute('style','height:50px;width:100px;');
 	
@@ -80,7 +102,7 @@ function drawTable()
 	showBackButton.size="large";
   	showBackButton.onclick = function (){
 	  cards.find(cardShowBack => cardShowBack.id == card.id).status = "ShownBack"
-  	  drawTable();
+  	  drawTables();
 	};
 	showBackButton.setAttribute('style','height:50px;width:100px;');
 	
@@ -90,14 +112,14 @@ function drawTable()
 	showFrontButton.size="large";
   	showFrontButton.onclick = function (){
 	  cards.find(cardShowBack => cardShowBack.id == card.id).status = "Shown"
-  	  drawTable();
+  	  drawTables();
 	};
 	showFrontButton.setAttribute('style','height:50px;width:100px;');
 	
 	if (card.status == "Hidden") {
 	  footerDiv.appendChild(revealButton);
 	} else if (card.status == "Shown") {
-	  if (card.content.layout == 'transform' || card.content.layout == 'modal_dfc'|| card.content.layout == 'reversible_card') {
+	  if (card.content.card_faces) {
 	   footerDiv.appendChild(showBackButton);
 	  } 
 	  footerDiv.appendChild(goneButton);
@@ -130,21 +152,1144 @@ function drawTable()
   
 }
 
+function drawBoosterTable()
+{
+  var table = document.getElementById('boosterTable');
+  var tableBody = document.createElement('tbody');
+  table.appendChild(tableBody);
+  
+  topRow = document.createElement('tr');
+  var topHeader = document.createElement("th");
+  topHeader.textContent =  "There are " + kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Booster")).length + " cards in the Booster Zone. ";
+  topRow.appendChild(topHeader);
+  
+	var showFourButton = document.createElement('button');
+	showFourButton.data =  "Show Four";
+	showFourButton.innerHTML = "Show Four";
+	showFourButton.size="large";
+	showFourButton.onclick = function (){
+	  if (kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Booster")).length > 4) {
+		  boosterCards = kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Booster"))
+		  chooseCardId = boosterCards[Math.floor(Math.random() * boosterCards.length)].id;
+		  kamigawaCards.find(card => (card.id == chooseCardId)).zone = "Choose"
+		  
+		  boosterCards = kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Booster"))
+		  chooseCardId = boosterCards[Math.floor(Math.random() * boosterCards.length)].id;
+		  kamigawaCards.find(card => (card.id == chooseCardId)).zone = "Choose"
+		  
+		  boosterCards = kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Booster"))
+		  chooseCardId = boosterCards[Math.floor(Math.random() * boosterCards.length)].id;
+		  kamigawaCards.find(card => (card.id == chooseCardId)).zone = "Choose"
+		  
+		  boosterCards = kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Booster"))
+		  chooseCardId = boosterCards[Math.floor(Math.random() * boosterCards.length)].id;
+		  kamigawaCards.find(card => (card.id == chooseCardId)).zone = "Choose"
+	  } else {
+	      kamigawaCards.forEach(function(card) {  
+			card.zone = "Choose";
+		  });
+	  }
+	  
+	  drawTables();
+	};
+	showFourButton.setAttribute('style','height:50px;width:100px;'); 
+	
+	topRow.appendChild(showFourButton);
+ 
+  tableBody.appendChild(topRow);
+  
+ if (table.tBodies[0]) {
+  table.replaceChild(tableBody, table.tBodies[0]);
+ } else {
+  table.appendChild(tableBody);
+ }
+}
+
+function drawChooseTable()
+{
+  var table = document.getElementById('chooseTable');
+  var tableBody = document.createElement('tbody');
+  table.appendChild(tableBody);
+  
+  kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Choose")).forEach(function(card, i) {
+	var headerRow
+	var cardRow
+	if (i % 5 == 0) {
+	  headerRow = document.createElement('tr');
+	  cardRow = document.createElement('tr');
+	  footerRow = document.createElement('tr');
+	} else {
+	  headerRow = table.rows[Math.floor(i/5)*3]
+	  cardRow = table.rows[Math.floor(i/5)*3 + 1]
+	  footerRow = table.rows[Math.floor(i/5)*3 + 2]
+	}
+	 var Header = document.createElement("th");
+     Header.textContent =  "Choose Zone: " + card.id;
+	 
+	  var cardDiv = document.createElement('td');
+	 var cardImage = document.createElement('img');
+	 
+	 var cardImageLink
+	 if (card.content.card_faces && card.content.layout != "flip") {
+	   if (card.status == "ShownBack") {
+	    cardImageLink = card.content.card_faces[1].image_uris.normal;
+	   } else {
+	    cardImageLink = card.content.card_faces[0].image_uris.normal;
+		}
+	 } else {
+	   cardImageLink = card.content.image_uris.normal;
+	 }
+	 
+	 cardImage.src =  (card.status == "Hidden") ? cardBackImage : cardImageLink;
+	 cardImage.width = 300;
+	 cardImage.height = 450;
+	 cardDiv.appendChild(cardImage);
+	 
+	 var footerDiv = document.createElement('td');
+	 footerDiv.setAttribute('style','text-align :center;');
+	var revealButton = document.createElement('button');
+  	revealButton.data =  "Reveal";
+  	revealButton.innerHTML = "Reveal";
+	revealButton.size="large";
+  	revealButton.onclick = function (){
+	  kamigawaCards.find(cardRevealed => cardRevealed.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	revealButton.setAttribute('style','height:50px;width:100px;');
+	
+	var handButton = document.createElement('button');
+  	handButton.data =  "Hand";
+  	handButton.innerHTML = "Hand";
+	handButton.size="large";
+  	handButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Hand"
+  	  drawTables();
+	};
+	handButton.setAttribute('style','height:50px;width:100px;');
+	
+	var graveyardButton = document.createElement('button');
+  	graveyardButton.data =  "Graveyard";
+  	graveyardButton.innerHTML = "Graveyard";
+	graveyardButton.size="large";
+  	graveyardButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Graveyard"
+  	  drawTables();
+	};
+	graveyardButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showBackButton = document.createElement('button');
+  	showBackButton.data =  "Show Back";
+  	showBackButton.innerHTML = "Show Back";
+	showBackButton.size="large";
+  	showBackButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "ShownBack"
+  	  drawTables();
+	};
+	showBackButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showFrontButton = document.createElement('button');
+  	showFrontButton.data =  "Show Front";
+  	showFrontButton.innerHTML = "Show Front";
+	showFrontButton.size="large";
+  	showFrontButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	showFrontButton.setAttribute('style','height:50px;width:100px;');
+	
+	if (card.status == "Hidden") {
+	  footerDiv.appendChild(revealButton);
+	} else if (card.status == "Shown") {
+	  if (card.content.card_faces) {
+	   footerDiv.appendChild(showBackButton);
+	  } 
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(graveyardButton);
+	} else if (card.status == "ShownBack") {
+	  footerDiv.appendChild(showFrontButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(graveyardButton);
+	}
+	 
+	
+	 headerRow.appendChild(Header);
+	 cardRow.appendChild(cardDiv);
+	 footerRow.appendChild(footerDiv);
+	 
+  
+	 
+     tableBody.appendChild(headerRow);
+	 tableBody.appendChild(cardRow);
+	 tableBody.appendChild(footerRow);
+
+ 
+	 if (table.tBodies[0]) {
+	  table.replaceChild(tableBody, table.tBodies[0]);
+	 } else {
+	  table.appendChild(tableBody);
+	 }
+  });
+  if (cards.filter(card => (card.status != "Gone")).length == 0) {
+    table.replaceChild(tableBody, table.tBodies[0]);
+  }
+  
+}
+
+function drawHandTable()
+{
+  var table = document.getElementById('handTable');
+  var tableBody = document.createElement('tbody');
+  table.appendChild(tableBody);
+  
+  kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Hand")).forEach(function(card, i) {
+	var headerRow
+	var cardRow
+	if (i % 5 == 0) {
+	  headerRow = document.createElement('tr');
+	  cardRow = document.createElement('tr');
+	  footerRow = document.createElement('tr');
+	} else {
+	  headerRow = table.rows[Math.floor(i/5)*3]
+	  cardRow = table.rows[Math.floor(i/5)*3 + 1]
+	  footerRow = table.rows[Math.floor(i/5)*3 + 2]
+	}
+	 var Header = document.createElement("th");
+     Header.textContent =  "Hand: " + card.id;
+	 
+	  var cardDiv = document.createElement('td');
+	 var cardImage = document.createElement('img');
+	 
+	 var cardImageLink
+	 if (card.content.card_faces && card.content.layout != "flip") {
+	   if (card.status == "ShownBack") {
+	    cardImageLink = card.content.card_faces[1].image_uris.normal;
+	   } else {
+	    cardImageLink = card.content.card_faces[0].image_uris.normal;
+		}
+	 } else {
+	   cardImageLink = card.content.image_uris.normal;
+	 }
+	 
+	 cardImage.src =  (card.status == "Hidden") ? cardBackImage : cardImageLink;
+	 cardImage.width = 300;
+	 cardImage.height = 450;
+	 cardDiv.appendChild(cardImage);
+	 
+	 var footerDiv = document.createElement('td');
+	 footerDiv.setAttribute('style','text-align :center;');
+	var revealButton = document.createElement('button');
+  	revealButton.data =  "Reveal";
+  	revealButton.innerHTML = "Reveal";
+	revealButton.size="large";
+  	revealButton.onclick = function (){
+	  kamigawaCards.find(cardRevealed => cardRevealed.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	revealButton.setAttribute('style','height:50px;width:100px;');
+	
+	var libraryButton = document.createElement('button');
+  	libraryButton.data =  "Library";
+  	libraryButton.innerHTML = "Library";
+	libraryButton.size="large";
+  	libraryButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Library"
+  	  drawTables();
+	};
+	libraryButton.setAttribute('style','height:50px;width:100px;');
+	
+	var handButton = document.createElement('button');
+  	handButton.data =  "Hand";
+  	handButton.innerHTML = "Hand";
+	handButton.size="large";
+  	handButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Hand"
+  	  drawTables();
+	};
+	handButton.setAttribute('style','height:50px;width:100px;');
+	
+	var battlefieldButton = document.createElement('button');
+  	battlefieldButton.data =  "Battlefield";
+  	battlefieldButton.innerHTML = "Battlefield";
+	battlefieldButton.size="large";
+  	battlefieldButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Battlefield"
+  	  drawTables();
+	};
+	battlefieldButton.setAttribute('style','height:50px;width:100px;');
+	
+	var graveyardButton = document.createElement('button');
+  	graveyardButton.data =  "Graveyard";
+  	graveyardButton.innerHTML = "Graveyard";
+	graveyardButton.size="large";
+  	graveyardButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Graveyard"
+  	  drawTables();
+	};
+	graveyardButton.setAttribute('style','height:50px;width:100px;');
+	
+	var exileButton = document.createElement('button');
+  	exileButton.data =  "Exile";
+  	exileButton.innerHTML = "Exile";
+	exileButton.size="large";
+  	exileButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Exile"
+  	  drawTables();
+	};
+	exileButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showBackButton = document.createElement('button');
+  	showBackButton.data =  "Show Back";
+  	showBackButton.innerHTML = "Show Back";
+	showBackButton.size="large";
+  	showBackButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "ShownBack"
+  	  drawTables();
+	};
+	showBackButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showFrontButton = document.createElement('button');
+  	showFrontButton.data =  "Show Front";
+  	showFrontButton.innerHTML = "Show Front";
+	showFrontButton.size="large";
+  	showFrontButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	showFrontButton.setAttribute('style','height:50px;width:100px;');
+	
+	if (card.status == "Hidden") {
+	  footerDiv.appendChild(revealButton);
+	} else if (card.status == "Shown") {
+	  if (card.content.card_faces) {
+	   footerDiv.appendChild(showBackButton);
+	  } 
+	  footerDiv.appendChild(libraryButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(battlefieldButton);
+	  footerDiv.appendChild(graveyardButton);
+	  footerDiv.appendChild(exileButton);
+	} else if (card.status == "ShownBack") {
+	  footerDiv.appendChild(showFrontButton);
+	  footerDiv.appendChild(libraryButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(battlefieldButton);
+	  footerDiv.appendChild(graveyardButton);
+	  footerDiv.appendChild(exileButton);
+	}
+	 
+	
+	 headerRow.appendChild(Header);
+	 cardRow.appendChild(cardDiv);
+	 footerRow.appendChild(footerDiv);
+	 
+  
+	 
+     tableBody.appendChild(headerRow);
+	 tableBody.appendChild(cardRow);
+	 tableBody.appendChild(footerRow);
+
+ 
+	 if (table.tBodies[0]) {
+	  table.replaceChild(tableBody, table.tBodies[0]);
+	 } else {
+	  table.appendChild(tableBody);
+	 }
+  });
+  if (cards.filter(card => (card.status != "Gone")).length == 0) {
+    table.replaceChild(tableBody, table.tBodies[0]);
+  }
+  
+}
+
+function drawGraveyardTable()
+{
+  var table = document.getElementById('graveyardTable');
+  var tableBody = document.createElement('tbody');
+  table.appendChild(tableBody);
+  
+  kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Graveyard")).forEach(function(card, i) {
+	var headerRow
+	var cardRow
+	if (i % 5 == 0) {
+	  headerRow = document.createElement('tr');
+	  cardRow = document.createElement('tr');
+	  footerRow = document.createElement('tr');
+	} else {
+	  headerRow = table.rows[Math.floor(i/5)*3]
+	  cardRow = table.rows[Math.floor(i/5)*3 + 1]
+	  footerRow = table.rows[Math.floor(i/5)*3 + 2]
+	}
+	 var Header = document.createElement("th");
+     Header.textContent =  "Graveyard: " + card.id;
+	 
+	  var cardDiv = document.createElement('td');
+	 var cardImage = document.createElement('img');
+	 
+	 var cardImageLink
+	 if (card.content.card_faces && card.content.layout != "flip") {
+	   if (card.status == "ShownBack") {
+	    cardImageLink = card.content.card_faces[1].image_uris.normal;
+	   } else {
+	    cardImageLink = card.content.card_faces[0].image_uris.normal;
+		}
+	 } else {
+	   cardImageLink = card.content.image_uris.normal;
+	 }
+	 
+	 cardImage.src =  (card.status == "Hidden") ? cardBackImage : cardImageLink;
+	 cardImage.width = 300;
+	 cardImage.height = 450;
+	 cardDiv.appendChild(cardImage);
+	 
+	 var footerDiv = document.createElement('td');
+	 footerDiv.setAttribute('style','text-align :center;');
+	var revealButton = document.createElement('button');
+  	revealButton.data =  "Reveal";
+  	revealButton.innerHTML = "Reveal";
+	revealButton.size="large";
+  	revealButton.onclick = function (){
+	  kamigawaCards.find(cardRevealed => cardRevealed.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	revealButton.setAttribute('style','height:50px;width:100px;');
+	
+	var libraryButton = document.createElement('button');
+  	libraryButton.data =  "Library";
+  	libraryButton.innerHTML = "Library";
+	libraryButton.size="large";
+  	libraryButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Library"
+  	  drawTables();
+	};
+	libraryButton.setAttribute('style','height:50px;width:100px;');
+	
+	var handButton = document.createElement('button');
+  	handButton.data =  "Hand";
+  	handButton.innerHTML = "Hand";
+	handButton.size="large";
+  	handButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Hand"
+  	  drawTables();
+	};
+	handButton.setAttribute('style','height:50px;width:100px;');
+	
+	var battlefieldButton = document.createElement('button');
+  	battlefieldButton.data =  "Battlefield";
+  	battlefieldButton.innerHTML = "Battlefield";
+	battlefieldButton.size="large";
+  	battlefieldButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Battlefield"
+  	  drawTables();
+	};
+	battlefieldButton.setAttribute('style','height:50px;width:100px;');
+	
+	var graveyardButton = document.createElement('button');
+  	graveyardButton.data =  "Graveyard";
+  	graveyardButton.innerHTML = "Graveyard";
+	graveyardButton.size="large";
+  	graveyardButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Graveyard"
+  	  drawTables();
+	};
+	graveyardButton.setAttribute('style','height:50px;width:100px;');
+	
+	var exileButton = document.createElement('button');
+  	exileButton.data =  "Exile";
+  	exileButton.innerHTML = "Exile";
+	exileButton.size="large";
+  	exileButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Exile"
+  	  drawTables();
+	};
+	exileButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showBackButton = document.createElement('button');
+  	showBackButton.data =  "Show Back";
+  	showBackButton.innerHTML = "Show Back";
+	showBackButton.size="large";
+  	showBackButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "ShownBack"
+  	  drawTables();
+	};
+	showBackButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showFrontButton = document.createElement('button');
+  	showFrontButton.data =  "Show Front";
+  	showFrontButton.innerHTML = "Show Front";
+	showFrontButton.size="large";
+  	showFrontButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	showFrontButton.setAttribute('style','height:50px;width:100px;');
+	
+	if (card.status == "Hidden") {
+	  footerDiv.appendChild(revealButton);
+	} else if (card.status == "Shown") {
+	  if (card.content.card_faces) {
+	   footerDiv.appendChild(showBackButton);
+	  } 
+	  footerDiv.appendChild(libraryButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(battlefieldButton);
+	  footerDiv.appendChild(graveyardButton);
+	  footerDiv.appendChild(exileButton);
+	} else if (card.status == "ShownBack") {
+	  footerDiv.appendChild(showFrontButton);
+	  footerDiv.appendChild(libraryButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(battlefieldButton);
+	  footerDiv.appendChild(graveyardButton);
+	  footerDiv.appendChild(exileButton);
+	}
+	 
+	
+	 headerRow.appendChild(Header);
+	 cardRow.appendChild(cardDiv);
+	 footerRow.appendChild(footerDiv);
+	 
+  
+	 
+     tableBody.appendChild(headerRow);
+	 tableBody.appendChild(cardRow);
+	 tableBody.appendChild(footerRow);
+
+ 
+	 if (table.tBodies[0]) {
+	  table.replaceChild(tableBody, table.tBodies[0]);
+	 } else {
+	  table.appendChild(tableBody);
+	 }
+  });
+  if (cards.filter(card => (card.status != "Gone")).length == 0) {
+    table.replaceChild(tableBody, table.tBodies[0]);
+  }
+  
+}
+
+function drawBattlefieldTable()
+{
+  var table = document.getElementById('battlefieldTable');
+  var tableBody = document.createElement('tbody');
+  table.appendChild(tableBody);
+  
+  kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Battlefield")).forEach(function(card, i) {
+	var headerRow
+	var cardRow
+	if (i % 5 == 0) {
+	  headerRow = document.createElement('tr');
+	  cardRow = document.createElement('tr');
+	  footerRow = document.createElement('tr');
+	} else {
+	  headerRow = table.rows[Math.floor(i/5)*3]
+	  cardRow = table.rows[Math.floor(i/5)*3 + 1]
+	  footerRow = table.rows[Math.floor(i/5)*3 + 2]
+	}
+	 var Header = document.createElement("th");
+     Header.textContent =  "Battlefield: " + card.id;
+	 
+	  var cardDiv = document.createElement('td');
+	 var cardImage = document.createElement('img');
+	 
+	 var cardImageLink
+	 if (card.content.card_faces && card.content.layout != "flip") {
+	   if (card.status == "ShownBack") {
+	    cardImageLink = card.content.card_faces[1].image_uris.normal;
+	   } else {
+	    cardImageLink = card.content.card_faces[0].image_uris.normal;
+		}
+	 } else {
+	   cardImageLink = card.content.image_uris.normal;
+	 }
+	 
+	 cardImage.src =  (card.status == "Hidden") ? cardBackImage : cardImageLink;
+	 cardImage.width = 300;
+	 cardImage.height = 450;
+	 cardDiv.appendChild(cardImage);
+	 
+	 var footerDiv = document.createElement('td');
+	 footerDiv.setAttribute('style','text-align :center;');
+	var revealButton = document.createElement('button');
+  	revealButton.data =  "Reveal";
+  	revealButton.innerHTML = "Reveal";
+	revealButton.size="large";
+  	revealButton.onclick = function (){
+	  kamigawaCards.find(cardRevealed => cardRevealed.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	revealButton.setAttribute('style','height:50px;width:100px;');
+	
+	var libraryButton = document.createElement('button');
+  	libraryButton.data =  "Library";
+  	libraryButton.innerHTML = "Library";
+	libraryButton.size="large";
+  	libraryButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Library"
+  	  drawTables();
+	};
+	libraryButton.setAttribute('style','height:50px;width:100px;');
+	
+	var handButton = document.createElement('button');
+  	handButton.data =  "Hand";
+  	handButton.innerHTML = "Hand";
+	handButton.size="large";
+  	handButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Hand"
+  	  drawTables();
+	};
+	handButton.setAttribute('style','height:50px;width:100px;');
+	
+	var battlefieldButton = document.createElement('button');
+  	battlefieldButton.data =  "Battlefield";
+  	battlefieldButton.innerHTML = "Battlefield";
+	battlefieldButton.size="large";
+  	battlefieldButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Battlefield"
+  	  drawTables();
+	};
+	battlefieldButton.setAttribute('style','height:50px;width:100px;');
+	
+	var graveyardButton = document.createElement('button');
+  	graveyardButton.data =  "Graveyard";
+  	graveyardButton.innerHTML = "Graveyard";
+	graveyardButton.size="large";
+  	graveyardButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Graveyard"
+  	  drawTables();
+	};
+	graveyardButton.setAttribute('style','height:50px;width:100px;');
+	
+	var exileButton = document.createElement('button');
+  	exileButton.data =  "Exile";
+  	exileButton.innerHTML = "Exile";
+	exileButton.size="large";
+  	exileButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Exile"
+  	  drawTables();
+	};
+	exileButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showBackButton = document.createElement('button');
+  	showBackButton.data =  "Show Back";
+  	showBackButton.innerHTML = "Show Back";
+	showBackButton.size="large";
+  	showBackButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "ShownBack"
+  	  drawTables();
+	};
+	showBackButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showFrontButton = document.createElement('button');
+  	showFrontButton.data =  "Show Front";
+  	showFrontButton.innerHTML = "Show Front";
+	showFrontButton.size="large";
+  	showFrontButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	showFrontButton.setAttribute('style','height:50px;width:100px;');
+	
+	if (card.status == "Hidden") {
+	  footerDiv.appendChild(revealButton);
+	} else if (card.status == "Shown") {
+	  if (card.content.card_faces) {
+	   footerDiv.appendChild(showBackButton);
+	  } 
+	  footerDiv.appendChild(libraryButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(battlefieldButton);
+	  footerDiv.appendChild(graveyardButton);
+	  footerDiv.appendChild(exileButton);
+	} else if (card.status == "ShownBack") {
+	  footerDiv.appendChild(showFrontButton);
+	  footerDiv.appendChild(libraryButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(battlefieldButton);
+	  footerDiv.appendChild(graveyardButton);
+	  footerDiv.appendChild(exileButton);
+	}
+	 
+	
+	 headerRow.appendChild(Header);
+	 cardRow.appendChild(cardDiv);
+	 footerRow.appendChild(footerDiv);
+	 
+  
+	 
+     tableBody.appendChild(headerRow);
+	 tableBody.appendChild(cardRow);
+	 tableBody.appendChild(footerRow);
+
+ 
+	 if (table.tBodies[0]) {
+	  table.replaceChild(tableBody, table.tBodies[0]);
+	 } else {
+	  table.appendChild(tableBody);
+	 }
+  });
+  if (cards.filter(card => (card.status != "Gone")).length == 0) {
+    table.replaceChild(tableBody, table.tBodies[0]);
+  }
+  
+}
+
+function drawLibraryTable()
+{
+  var table = document.getElementById('libraryTable');
+  var tableBody = document.createElement('tbody');
+  table.appendChild(tableBody);
+  
+  kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Library")).forEach(function(card, i) {
+	var headerRow
+	var cardRow
+	if (i % 5 == 0) {
+	  headerRow = document.createElement('tr');
+	  cardRow = document.createElement('tr');
+	  footerRow = document.createElement('tr');
+	} else {
+	  headerRow = table.rows[Math.floor(i/5)*3]
+	  cardRow = table.rows[Math.floor(i/5)*3 + 1]
+	  footerRow = table.rows[Math.floor(i/5)*3 + 2]
+	}
+	 var Header = document.createElement("th");
+     Header.textContent =  "Library: " + card.id;
+	 
+	  var cardDiv = document.createElement('td');
+	 var cardImage = document.createElement('img');
+	 
+	 var cardImageLink
+	 if (card.content.card_faces && card.content.layout != "flip") {
+	   if (card.status == "ShownBack") {
+	    cardImageLink = card.content.card_faces[1].image_uris.normal;
+	   } else {
+	    cardImageLink = card.content.card_faces[0].image_uris.normal;
+		}
+	 } else {
+	   cardImageLink = card.content.image_uris.normal;
+	 }
+	 
+	 cardImage.src =  (card.status == "Hidden") ? cardBackImage : cardImageLink;
+	 cardImage.width = 300;
+	 cardImage.height = 450;
+	 cardDiv.appendChild(cardImage);
+	 
+	 var footerDiv = document.createElement('td');
+	 footerDiv.setAttribute('style','text-align :center;');
+	var revealButton = document.createElement('button');
+  	revealButton.data =  "Reveal";
+  	revealButton.innerHTML = "Reveal";
+	revealButton.size="large";
+  	revealButton.onclick = function (){
+	  kamigawaCards.find(cardRevealed => cardRevealed.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	revealButton.setAttribute('style','height:50px;width:100px;');
+	
+	var libraryButton = document.createElement('button');
+  	libraryButton.data =  "Library";
+  	libraryButton.innerHTML = "Library";
+	libraryButton.size="large";
+  	libraryButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Library"
+  	  drawTables();
+	};
+	libraryButton.setAttribute('style','height:50px;width:100px;');
+	
+	var handButton = document.createElement('button');
+  	handButton.data =  "Hand";
+  	handButton.innerHTML = "Hand";
+	handButton.size="large";
+  	handButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Hand"
+  	  drawTables();
+	};
+	handButton.setAttribute('style','height:50px;width:100px;');
+	
+	var battlefieldButton = document.createElement('button');
+  	battlefieldButton.data =  "Battlefield";
+  	battlefieldButton.innerHTML = "Battlefield";
+	battlefieldButton.size="large";
+  	battlefieldButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Battlefield"
+  	  drawTables();
+	};
+	battlefieldButton.setAttribute('style','height:50px;width:100px;');
+	
+	var graveyardButton = document.createElement('button');
+  	graveyardButton.data =  "Graveyard";
+  	graveyardButton.innerHTML = "Graveyard";
+	graveyardButton.size="large";
+  	graveyardButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Graveyard"
+  	  drawTables();
+	};
+	graveyardButton.setAttribute('style','height:50px;width:100px;');
+	
+	var exileButton = document.createElement('button');
+  	exileButton.data =  "Exile";
+  	exileButton.innerHTML = "Exile";
+	exileButton.size="large";
+  	exileButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Exile"
+  	  drawTables();
+	};
+	exileButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showBackButton = document.createElement('button');
+  	showBackButton.data =  "Show Back";
+  	showBackButton.innerHTML = "Show Back";
+	showBackButton.size="large";
+  	showBackButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "ShownBack"
+  	  drawTables();
+	};
+	showBackButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showFrontButton = document.createElement('button');
+  	showFrontButton.data =  "Show Front";
+  	showFrontButton.innerHTML = "Show Front";
+	showFrontButton.size="large";
+  	showFrontButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	showFrontButton.setAttribute('style','height:50px;width:100px;');
+	
+	if (card.status == "Hidden") {
+	  footerDiv.appendChild(revealButton);
+	} else if (card.status == "Shown") {
+	  if (card.content.card_faces) {
+	   footerDiv.appendChild(showBackButton);
+	  } 
+	  footerDiv.appendChild(libraryButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(battlefieldButton);
+	  footerDiv.appendChild(graveyardButton);
+	  footerDiv.appendChild(exileButton);
+	} else if (card.status == "ShownBack") {
+	  footerDiv.appendChild(showFrontButton);
+	  footerDiv.appendChild(libraryButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(battlefieldButton);
+	  footerDiv.appendChild(graveyardButton);
+	  footerDiv.appendChild(exileButton);
+	}
+	 
+	
+	 headerRow.appendChild(Header);
+	 cardRow.appendChild(cardDiv);
+	 footerRow.appendChild(footerDiv);
+	 
+  
+	 
+     tableBody.appendChild(headerRow);
+	 tableBody.appendChild(cardRow);
+	 tableBody.appendChild(footerRow);
+
+ 
+	 if (table.tBodies[0]) {
+	  table.replaceChild(tableBody, table.tBodies[0]);
+	 } else {
+	  table.appendChild(tableBody);
+	 }
+  });
+  if (cards.filter(card => (card.status != "Gone")).length == 0) {
+    table.replaceChild(tableBody, table.tBodies[0]);
+  }
+  
+}
+
+function drawExileTable()
+{
+  var table = document.getElementById('exileTable');
+  var tableBody = document.createElement('tbody');
+  table.appendChild(tableBody);
+  
+  kamigawaCards.filter(card => (card.status != "Gone" && card.zone == "Exile")).forEach(function(card, i) {
+	var headerRow
+	var cardRow
+	if (i % 5 == 0) {
+	  headerRow = document.createElement('tr');
+	  cardRow = document.createElement('tr');
+	  footerRow = document.createElement('tr');
+	} else {
+	  headerRow = table.rows[Math.floor(i/5)*3]
+	  cardRow = table.rows[Math.floor(i/5)*3 + 1]
+	  footerRow = table.rows[Math.floor(i/5)*3 + 2]
+	}
+	 var Header = document.createElement("th");
+     Header.textContent =  "Exile: " + card.id;
+	 
+	  var cardDiv = document.createElement('td');
+	 var cardImage = document.createElement('img');
+	 
+	 var cardImageLink
+	 if (card.content.card_faces && card.content.layout != "flip") {
+	   if (card.status == "ShownBack") {
+	    cardImageLink = card.content.card_faces[1].image_uris.normal;
+	   } else {
+	    cardImageLink = card.content.card_faces[0].image_uris.normal;
+		}
+	 } else {
+	   cardImageLink = card.content.image_uris.normal;
+	 }
+	 
+	 cardImage.src =  (card.status == "Hidden") ? cardBackImage : cardImageLink;
+	 cardImage.width = 300;
+	 cardImage.height = 450;
+	 cardDiv.appendChild(cardImage);
+	 
+	 var footerDiv = document.createElement('td');
+	 footerDiv.setAttribute('style','text-align :center;');
+	var revealButton = document.createElement('button');
+  	revealButton.data =  "Reveal";
+  	revealButton.innerHTML = "Reveal";
+	revealButton.size="large";
+  	revealButton.onclick = function (){
+	  kamigawaCards.find(cardRevealed => cardRevealed.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	revealButton.setAttribute('style','height:50px;width:100px;');
+	
+	var libraryButton = document.createElement('button');
+  	libraryButton.data =  "Library";
+  	libraryButton.innerHTML = "Library";
+	libraryButton.size="large";
+  	libraryButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Library"
+  	  drawTables();
+	};
+	libraryButton.setAttribute('style','height:50px;width:100px;');
+	
+	var handButton = document.createElement('button');
+  	handButton.data =  "Hand";
+  	handButton.innerHTML = "Hand";
+	handButton.size="large";
+  	handButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Hand"
+  	  drawTables();
+	};
+	handButton.setAttribute('style','height:50px;width:100px;');
+	
+	var battlefieldButton = document.createElement('button');
+  	battlefieldButton.data =  "Battlefield";
+  	battlefieldButton.innerHTML = "Battlefield";
+	battlefieldButton.size="large";
+  	battlefieldButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Battlefield"
+  	  drawTables();
+	};
+	battlefieldButton.setAttribute('style','height:50px;width:100px;');
+	
+	var graveyardButton = document.createElement('button');
+  	graveyardButton.data =  "Graveyard";
+  	graveyardButton.innerHTML = "Graveyard";
+	graveyardButton.size="large";
+  	graveyardButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Graveyard"
+  	  drawTables();
+	};
+	graveyardButton.setAttribute('style','height:50px;width:100px;');
+	
+	var exileButton = document.createElement('button');
+  	exileButton.data =  "Exile";
+  	exileButton.innerHTML = "Exile";
+	exileButton.size="large";
+  	exileButton.onclick = function (){
+	  kamigawaCards.find(cardGone => cardGone.id == card.id).zone = "Exile"
+  	  drawTables();
+	};
+	exileButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showBackButton = document.createElement('button');
+  	showBackButton.data =  "Show Back";
+  	showBackButton.innerHTML = "Show Back";
+	showBackButton.size="large";
+  	showBackButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "ShownBack"
+  	  drawTables();
+	};
+	showBackButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showFrontButton = document.createElement('button');
+  	showFrontButton.data =  "Show Front";
+  	showFrontButton.innerHTML = "Show Front";
+	showFrontButton.size="large";
+  	showFrontButton.onclick = function (){
+	  kamigawaCards.find(cardShowBack => cardShowBack.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	showFrontButton.setAttribute('style','height:50px;width:100px;');
+	
+	if (card.status == "Hidden") {
+	  footerDiv.appendChild(revealButton);
+	} else if (card.status == "Shown") {
+	  if (card.content.card_faces) {
+	   footerDiv.appendChild(showBackButton);
+	  } 
+	  footerDiv.appendChild(libraryButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(battlefieldButton);
+	  footerDiv.appendChild(graveyardButton);
+	  footerDiv.appendChild(exileButton);
+	} else if (card.status == "ShownBack") {
+	  footerDiv.appendChild(showFrontButton);
+	  footerDiv.appendChild(libraryButton);
+	  footerDiv.appendChild(handButton);
+	  footerDiv.appendChild(battlefieldButton);
+	  footerDiv.appendChild(graveyardButton);
+	  footerDiv.appendChild(exileButton);
+	}
+	 
+	
+	 headerRow.appendChild(Header);
+	 cardRow.appendChild(cardDiv);
+	 footerRow.appendChild(footerDiv);
+	 
+  
+	 
+     tableBody.appendChild(headerRow);
+	 tableBody.appendChild(cardRow);
+	 tableBody.appendChild(footerRow);
+
+ 
+	 if (table.tBodies[0]) {
+	  table.replaceChild(tableBody, table.tBodies[0]);
+	 } else {
+	  table.appendChild(tableBody);
+	 }
+  });
+  if (cards.filter(card => (card.status != "Gone")).length == 0) {
+    table.replaceChild(tableBody, table.tBodies[0]);
+  }
+  
+}
+
 document.getElementById("cardButton").onclick=async() => {
   const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land');
   const cardContent = await response.json(); //extract JSON from the http response
-  console.log(cardContent);
   let card = {content: cardContent, status: "Hidden", id: cardId}
   cardId += 1;
   cards.push(card);
-  drawTable();
+  drawTables();
+};
+
+document.getElementById("kamigawaButton").onclick=async() => {
+  let pack = []
+  let includesFoil = Math.floor(Math.random() * 3) == 2;
+  while (pack.length < 1) {
+	  const response = await fetch('https://api.scryfall.com/cards/random?q=(e:neo or e:sok or e:bok or e:chk)rarity>=rare');
+	  const cardContent = await response.json(); //extract JSON from the http response
+	  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+	  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+		  kamigawaCardId += 1;
+		  pack.push(card);
+	  }
+   }
+  while (pack.length < 4) {
+	  const response = await fetch('https://api.scryfall.com/cards/random?q=(e:neo or e:sok or e:bok or e:chk)rarity=uncommon');
+	  const cardContent = await response.json(); //extract JSON from the http response
+	  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+	  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+		  kamigawaCardId += 1;
+		  pack.push(card);
+	  }
+   }
+  while (pack.length < 5) {
+	  const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land(e:neo or e:sok or e:bok or e:chk)rarity=common c:w');
+	  const cardContent = await response.json(); //extract JSON from the http response
+	  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+	  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+		  kamigawaCardId += 1;
+		  pack.push(card);
+	  }
+   }
+  while (pack.length < 6) {
+	  const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land(e:neo or e:sok or e:bok or e:chk)rarity=common c:u');
+	  const cardContent = await response.json(); //extract JSON from the http response
+	  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+	  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+		  kamigawaCardId += 1;
+		  pack.push(card);
+	  }
+   }
+  while (pack.length < 7) {
+	  const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land(e:neo or e:sok or e:bok or e:chk)rarity=common c:b');
+	  const cardContent = await response.json(); //extract JSON from the http response
+	  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+	  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+		  kamigawaCardId += 1;
+		  pack.push(card);
+	  }
+   }
+  while (pack.length < 8) {
+	  const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land(e:neo or e:sok or e:bok or e:chk)rarity=common c:r');
+	  const cardContent = await response.json(); //extract JSON from the http response
+	  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+	  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+		  kamigawaCardId += 1;
+		  pack.push(card);
+	  }
+   }
+  while (pack.length < 9) {
+	  const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land(e:neo or e:sok or e:bok or e:chk)rarity=common c:g');
+	  const cardContent = await response.json(); //extract JSON from the http response
+	  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+	  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+		  kamigawaCardId += 1;
+		  pack.push(card);
+	  }
+   }
+  while (pack.length < 13) {
+	  const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land(e:neo or e:sok or e:bok or e:chk)rarity=common');
+	  const cardContent = await response.json(); //extract JSON from the http response
+	  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+	  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+		  kamigawaCardId += 1;
+		  pack.push(card);
+	  }
+   }
+  if (includesFoil) {
+	  while (pack.length < 14) {
+		  const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land(e:neo or e:sok or e:bok or e:chk)is:foil');
+		  const cardContent = await response.json(); //extract JSON from the http response
+		  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+		  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+			  kamigawaCardId += 1;
+			  pack.push(card);
+		  }
+	   }
+  } else {  
+	  while (pack.length < 14) {
+		  const response = await fetch('https://api.scryfall.com/cards/random?q=-t:land(e:neo or e:sok or e:bok or e:chk)rarity=common');
+		  const cardContent = await response.json(); //extract JSON from the http response
+		  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+		  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+			  kamigawaCardId += 1;
+			  pack.push(card);
+		  }
+	   }
+   }	    
+  while (pack.length < 15) {
+	  const response = await fetch('https://api.scryfall.com/cards/random?q=t:land(e:neo or e:sok or e:bok or e:chk)rarity=common');
+	  const cardContent = await response.json(); //extract JSON from the http response
+	  let card = {content: cardContent, status: "Hidden", id: kamigawaCardId, zone: "Booster"}
+	  if (pack.filter(packCard => (packCard.content.name == card.content.name)).length == 0) {
+		  kamigawaCardId += 1;
+		  pack.push(card);
+	  }
+   }
+  pack.forEach(function(card) {  
+	kamigawaCards.push(card);
+  });
+  drawTables();
 };
 
 document.getElementById("restoreButton").onclick = function()  {
   cards.filter(card => (card.status == "Gone")).forEach(function(card) {
     card.status = "Shown";
   });
-  drawTable();
+  drawTables();
 };
 
 
