@@ -1430,18 +1430,20 @@ document.getElementById("commanderButton").onclick=async() => {
   }
   while (commanderCards.length < 100) {
 		let response;
-	  if (commanderCards.filter(existingCard => !(existingCard.content.type_line.includes("Land"))).length < 62) {
-		 response = await fetch('https://api.scryfall.com/cards/random?q=f:commander id<=' + colorIdentity);
-	  } else {
-		 if (commanderCards.filter(existingCard => existingCard.content.type_line.includes("Basic")).length < 30){
+	  if (commanderCards.length < 62) {
+		 response = await fetch('https://api.scryfall.com/cards/random?q=-t:land f:commander id<=' + colorIdentity);
+	  } else if (commanderCards.length < 77) {
 		  if (colorIdentity == "c") {
 		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id<=' + colorIdentity);
 		  } else {
 		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id>c id<=' + colorIdentity);
 		  }
-		 } else {
-		  response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + colorIdentity);
-		 }
+	} else if (commanderCards.length < 92 && colorIdentity != "c") {
+	   response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id>c id<=' + colorIdentity);
+	}
+	 } else {
+	  response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + colorIdentity);
+	 }
 	  }
 	  const cardContent = await response.json(); //extract JSON from the http response
 	  let card = {content: cardContent, status: "Shown", id: cardId}
