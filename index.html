@@ -1401,6 +1401,7 @@ document.getElementById("kamigawaButton").onclick=async() => {
 document.getElementById("commanderButton").onclick=async() => {
   commanderCards.length = 0;
   cardId = 0;
+  document.getElementById("commanderButton").disabled = true;
   const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander');
   const commanderContent = await commanderResponse.json(); //extract JSON from the http response
   let commander = {content: commanderContent, status: "Shown", id: cardId}
@@ -1426,6 +1427,7 @@ document.getElementById("commanderButton").onclick=async() => {
 	  }
 	  await new Promise(r => setTimeout(r, 100));
   }
+  document.getElementById("commanderButton").disabled = false;  	
 };
 
 document.getElementById("restoreButton").onclicka = function()  {
