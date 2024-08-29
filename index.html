@@ -28,7 +28,7 @@ let commanderCards = []
 let cardBackImage = "https://backs.scryfall.io/large/2/2/222b7a3b-2321-4d4c-af19-19338b134971.jpg?1677416389";
 
 function isDoubleFace(card) {
-  return (card.content.card_faces && card.content.layout != "flip" && card.content.layout != "split")
+  return (card.content.card_faces && card.content.layout != "flip" && card.content.layout != "split" && card.content.layout != "adventure")
 }
 
 function drawTables() {
@@ -1193,6 +1193,18 @@ function drawCommanderTable()
 	 var Header = document.createElement("th");
      Header.textContent =  card.id;
 	 
+	var allCardNames = commanderCards.map(obj=>
+    obj.content.name);
+	 
+	var copyButton = document.createElement('button');
+  	copyButton.data =  "Copy Deck To Clipboard";
+  	copyButton.innerHTML = "Copy Deck To Clipboard";
+	copyButton.size="large";
+	copyButton.setAttribute('style','height:50px;width:100px;');
+  	copyButton.onclick = function (){
+	  navigator.clipboard.writeText(allCardNames.join("\n"));
+	};
+	 
 	  var cardDiv = document.createElement('td');
 	 var cardImage = document.createElement('img');
 	 
@@ -1252,6 +1264,10 @@ function drawCommanderTable()
 	  } 
 	} else if (card.status == "ShownBack") {
 	  footerDiv.appendChild(showFrontButton);
+	}
+	
+	if (card.id == 0){
+	  footerDiv.appendChild(copyButton);
 	}
 	 
 	
@@ -1408,26 +1424,26 @@ document.getElementById("commanderButton").onclick=async() => {
   cardId += 1;
   commanderCards.push(commander);
   while (commanderCards.length < 100) {
-        let response;
-      if (commanderCards.filter(existingCard => !(existingCard.content.type_line.includes("Land"))).length < 62) {
-	     response = await fetch('https://api.scryfall.com/cards/random?q=f:commander id<=' + commander.content.color_identity.join(""));
+		let response;
+	  if (commanderCards.filter(existingCard => !(existingCard.content.type_line.includes("Land"))).length < 62) {
+		 response = await fetch('https://api.scryfall.com/cards/random?q=f:commander id<=' + commander.content.color_identity.join(""));
 	  } else {
-	     if (commanderCards.filter(existingCard => existingCard.content.type_line.includes("Basic")).length < 30){
+		 if (commanderCards.filter(existingCard => existingCard.content.type_line.includes("Basic")).length < 30){
 		  response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id>c id<=' + commander.content.color_identity.join(""));
 		 } else {
-	      response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + commander.content.color_identity.join(""));
+		  response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + commander.content.color_identity.join(""));
 		 }
 	  }
 	  const cardContent = await response.json(); //extract JSON from the http response
 	  let card = {content: cardContent, status: "Shown", id: cardId}
-	  if (!(commanderCards.find(existingCard => (existingCard.content.oracle_id == card.content.oracle_id))) || card.content.type_line.includes("Basic")) {
+	  if (!(commanderCards.find(existingCard => (existingCard.content.name == card.content.name))) || card.content.type_line.includes("Basic")) {
 		  cardId += 1;
 		  commanderCards.push(card);
 		  drawTables();
 	  }
 	  await new Promise(r => setTimeout(r, 100));
   }
-  document.getElementById("commanderButton").disabled = false;  	
+  document.getElementById("commanderButton").disabled = false;  
 };
 
 document.getElementById("restoreButton").onclicka = function()  {
