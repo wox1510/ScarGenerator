@@ -1429,7 +1429,11 @@ document.getElementById("commanderButton").onclick=async() => {
 		 response = await fetch('https://api.scryfall.com/cards/random?q=f:commander id<=' + commander.content.color_identity.join(""));
 	  } else {
 		 if (commanderCards.filter(existingCard => existingCard.content.type_line.includes("Basic")).length < 30){
-		  response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id>c id<=' + commander.content.color_identity.join(""));
+		  if (commander.content.color_identity.join("") == "c") {
+		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id<=' + commander.content.color_identity.join(""));
+		  } else {
+		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id>c id<=' + commander.content.color_identity.join(""));
+		  }
 		 } else {
 		  response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + commander.content.color_identity.join(""));
 		 }
