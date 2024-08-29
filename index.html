@@ -5,7 +5,8 @@
 <h1>Click the button to get a card.</h1>
 <div>
 <button type="button" style="height:50px;width:100px" id=cardButton>Random Discord Card!</button>
-<button type="button" style="height:50px;width:100px" id=kamigawaButton>Kamigawa Pack!</button><br>
+<button type="button" style="height:50px;width:100px" id=kamigawaButton>Kamigawa Pack!</button>
+<button type="button" style="height:50px;width:100px" id=commanderButton>Commander Deck!</button><br>
 <table id="cardTable" border="1">
 <br>
 <table id="boosterTable" border="1"><br>
@@ -15,6 +16,7 @@
 <table id="battlefieldTable" border="1"><br>
 <table id="graveyardTable" border="1"><br>
 <table id="exileTable" border="1"><br>
+<table id="commanderTable" border="1"><br>
 <button type="button" id=restoreButton>Restore</button><br>
 
 <script>
@@ -22,7 +24,12 @@ let cards = []
 let cardId = 1;
 let kamigawaCards = []
 let kamigawaCardId = 1;
+let commanderCards = []
 let cardBackImage = "https://backs.scryfall.io/large/2/2/222b7a3b-2321-4d4c-af19-19338b134971.jpg?1677416389";
+
+function isDoubleFace(card) {
+  return (card.content.card_faces && card.content.layout != "flip" && card.content.layout != "split")
+}
 
 function drawTables() {
   drawCardsTable();
@@ -33,6 +40,7 @@ function drawTables() {
   drawBattlefieldTable();
   drawGraveyardTable();
   drawExileTable();
+  drawCommanderTable();
 }
 
 function drawCardsTable()
@@ -59,7 +67,7 @@ function drawCardsTable()
 	 var cardImage = document.createElement('img');
 	 
 	 var cardImageLink
-	 if (card.content.card_faces && card.content.layout != "flip") {
+	 if (isDoubleFace(card)) {
 	   if (card.status == "ShownBack") {
 	    cardImageLink = card.content.card_faces[1].image_uris.normal;
 	   } else {
@@ -230,7 +238,7 @@ function drawChooseTable()
 	 var cardImage = document.createElement('img');
 	 
 	 var cardImageLink
-	 if (card.content.card_faces && card.content.layout != "flip") {
+	 if (isDoubleFace(card)) {
 	   if (card.status == "ShownBack") {
 	    cardImageLink = card.content.card_faces[1].image_uris.normal;
 	   } else {
@@ -360,7 +368,7 @@ function drawHandTable()
 	 var cardImage = document.createElement('img');
 	 
 	 var cardImageLink
-	 if (card.content.card_faces && card.content.layout != "flip") {
+	 if (isDoubleFace(card)) {
 	   if (card.status == "ShownBack") {
 	    cardImageLink = card.content.card_faces[1].image_uris.normal;
 	   } else {
@@ -526,7 +534,7 @@ function drawGraveyardTable()
 	 var cardImage = document.createElement('img');
 	 
 	 var cardImageLink
-	 if (card.content.card_faces && card.content.layout != "flip") {
+	 if (isDoubleFace(card)) {
 	   if (card.status == "ShownBack") {
 	    cardImageLink = card.content.card_faces[1].image_uris.normal;
 	   } else {
@@ -692,7 +700,7 @@ function drawBattlefieldTable()
 	 var cardImage = document.createElement('img');
 	 
 	 var cardImageLink
-	 if (card.content.card_faces && card.content.layout != "flip") {
+	 if (isDoubleFace(card)) {
 	   if (card.status == "ShownBack") {
 	    cardImageLink = card.content.card_faces[1].image_uris.normal;
 	   } else {
@@ -858,7 +866,7 @@ function drawLibraryTable()
 	 var cardImage = document.createElement('img');
 	 
 	 var cardImageLink
-	 if (card.content.card_faces && card.content.layout != "flip") {
+	 if (isDoubleFace(card)) {
 	   if (card.status == "ShownBack") {
 	    cardImageLink = card.content.card_faces[1].image_uris.normal;
 	   } else {
@@ -1024,7 +1032,7 @@ function drawExileTable()
 	 var cardImage = document.createElement('img');
 	 
 	 var cardImageLink
-	 if (card.content.card_faces && card.content.layout != "flip") {
+	 if (isDoubleFace(card)) {
 	   if (card.status == "ShownBack") {
 	    cardImageLink = card.content.card_faces[1].image_uris.normal;
 	   } else {
@@ -1139,6 +1147,111 @@ function drawExileTable()
 	  footerDiv.appendChild(battlefieldButton);
 	  footerDiv.appendChild(graveyardButton);
 	  footerDiv.appendChild(exileButton);
+	}
+	 
+	
+	 headerRow.appendChild(Header);
+	 cardRow.appendChild(cardDiv);
+	 footerRow.appendChild(footerDiv);
+	 
+  
+	 
+     tableBody.appendChild(headerRow);
+	 tableBody.appendChild(cardRow);
+	 tableBody.appendChild(footerRow);
+
+ 
+	 if (table.tBodies[0]) {
+	  table.replaceChild(tableBody, table.tBodies[0]);
+	 } else {
+	  table.appendChild(tableBody);
+	 }
+  });
+  if (cards.filter(card => (card.status != "Gone")).length == 0) {
+    table.replaceChild(tableBody, table.tBodies[0]);
+  }
+  
+}
+
+function drawCommanderTable()
+{
+  var table = document.getElementById('commanderTable');
+  var tableBody = document.createElement('tbody');
+  table.appendChild(tableBody);
+  commanderCards.filter(card => (card.status != "Gone")).forEach(function(card, i) {
+	var headerRow
+	var cardRow
+	if (i % 5 == 0) {
+	  headerRow = document.createElement('tr');
+	  cardRow = document.createElement('tr');
+	  footerRow = document.createElement('tr');
+	} else {
+	  headerRow = table.rows[Math.floor(i/5)*3]
+	  cardRow = table.rows[Math.floor(i/5)*3 + 1]
+	  footerRow = table.rows[Math.floor(i/5)*3 + 2]
+	}
+	 var Header = document.createElement("th");
+     Header.textContent =  card.id;
+	 
+	  var cardDiv = document.createElement('td');
+	 var cardImage = document.createElement('img');
+	 
+	 var cardImageLink
+	 if (isDoubleFace(card)) {
+	   if (card.status == "ShownBack") {
+	    cardImageLink = card.content.card_faces[1].image_uris.normal;
+	   } else {
+	    cardImageLink = card.content.card_faces[0].image_uris.normal;
+		}
+	 } else {
+	   cardImageLink = card.content.image_uris.normal;
+	 }
+	 
+	 cardImage.src =  (card.status == "Hidden") ? cardBackImage : cardImageLink;
+	 cardImage.width = 300;
+	 cardImage.height = 450;
+	 cardDiv.appendChild(cardImage);
+	 
+	 var footerDiv = document.createElement('td');
+	 footerDiv.setAttribute('style','text-align :center;');
+	var revealButton = document.createElement('button');
+  	revealButton.data =  "Reveal";
+  	revealButton.innerHTML = "Reveal";
+	revealButton.size="large";
+  	revealButton.onclick = function (){
+	  commanderCards.find(cardRevealed => cardRevealed.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	revealButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showBackButton = document.createElement('button');
+  	showBackButton.data =  "Show Back";
+  	showBackButton.innerHTML = "Show Back";
+	showBackButton.size="large";
+  	showBackButton.onclick = function (){
+	  commanderCards.find(cardShowBack => cardShowBack.id == card.id).status = "ShownBack"
+  	  drawTables();
+	};
+	showBackButton.setAttribute('style','height:50px;width:100px;');
+	
+	var showFrontButton = document.createElement('button');
+  	showFrontButton.data =  "Show Front";
+  	showFrontButton.innerHTML = "Show Front";
+	showFrontButton.size="large";
+  	showFrontButton.onclick = function (){
+	  commanderCards.find(cardShowBack => cardShowBack.id == card.id).status = "Shown"
+  	  drawTables();
+	};
+	showFrontButton.setAttribute('style','height:50px;width:100px;');
+	
+	if (card.status == "Hidden") {
+	  footerDiv.appendChild(revealButton);
+	} else if (card.status == "Shown") {
+	  if (card.content.card_faces) {
+	   footerDiv.appendChild(showBackButton);
+	  } 
+	} else if (card.status == "ShownBack") {
+	  footerDiv.appendChild(showFrontButton);
 	}
 	 
 	
@@ -1285,7 +1398,37 @@ document.getElementById("kamigawaButton").onclick=async() => {
   drawTables();
 };
 
-document.getElementById("restoreButton").onclick = function()  {
+document.getElementById("commanderButton").onclick=async() => {
+  commanderCards.length = 0;
+  cardId = 0;
+  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander');
+  const commanderContent = await commanderResponse.json(); //extract JSON from the http response
+  let commander = {content: commanderContent, status: "Shown", id: cardId}
+  cardId += 1;
+  commanderCards.push(commander);
+  while (commanderCards.length < 100) {
+        let response;
+      if (commanderCards.filter(existingCard => !(existingCard.content.type_line.includes("Land"))).length < 62) {
+	     response = await fetch('https://api.scryfall.com/cards/random?q=f:commander id<=' + commander.content.color_identity.join(""));
+	  } else {
+	     if (commanderCards.filter(existingCard => existingCard.content.type_line.includes("Basic")).length < 30){
+		  response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id>c id<=' + commander.content.color_identity.join(""));
+		 } else {
+	      response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + commander.content.color_identity.join(""));
+		 }
+	  }
+	  const cardContent = await response.json(); //extract JSON from the http response
+	  let card = {content: cardContent, status: "Shown", id: cardId}
+	  if (!(commanderCards.find(existingCard => (existingCard.content.oracle_id == card.content.oracle_id))) || card.content.type_line.includes("Basic")) {
+		  cardId += 1;
+		  commanderCards.push(card);
+		  drawTables();
+	  }
+	  await new Promise(r => setTimeout(r, 100));
+  }
+};
+
+document.getElementById("restoreButton").onclicka = function()  {
   cards.filter(card => (card.status == "Gone")).forEach(function(card) {
     card.status = "Shown";
   });
