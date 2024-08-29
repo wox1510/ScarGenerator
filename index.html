@@ -1418,24 +1418,29 @@ document.getElementById("commanderButton").onclick=async() => {
   commanderCards.length = 0;
   cardId = 0;
   document.getElementById("commanderButton").disabled = true;
-  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander');
+  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander id:c');
   const commanderContent = await commanderResponse.json(); //extract JSON from the http response
   let commander = {content: commanderContent, status: "Shown", id: cardId}
+  console.log(commander);
   cardId += 1;
   commanderCards.push(commander);
+  colorIdentity = "c";
+  if (commander.content.color_identity.length > 0) {
+   colorIdentity = commander.content.color_identity.join("")
+  }
   while (commanderCards.length < 100) {
 		let response;
 	  if (commanderCards.filter(existingCard => !(existingCard.content.type_line.includes("Land"))).length < 62) {
-		 response = await fetch('https://api.scryfall.com/cards/random?q=f:commander id<=' + commander.content.color_identity.join(""));
+		 response = await fetch('https://api.scryfall.com/cards/random?q=f:commander id<=' + colorIdentity);
 	  } else {
 		 if (commanderCards.filter(existingCard => existingCard.content.type_line.includes("Basic")).length < 30){
-		  if (commander.content.color_identity.join("") == "c") {
-		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id<=' + commander.content.color_identity.join(""));
+		  if (colorIdentity == "c") {
+		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id<=' + colorIdentity);
 		  } else {
-		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id>c id<=' + commander.content.color_identity.join(""));
+		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id>c id<=' + colorIdentity);
 		  }
 		 } else {
-		  response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + commander.content.color_identity.join(""));
+		  response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + colorIdentity);
 		 }
 	  }
 	  const cardContent = await response.json(); //extract JSON from the http response
