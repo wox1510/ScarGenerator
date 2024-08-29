@@ -1440,13 +1440,12 @@ document.getElementById("commanderButton").onclick=async() => {
 		  }
 	} else if (commanderCards.length < 92 && colorIdentity != "c") {
 	   response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id>c id<=' + colorIdentity);
-	}
 	 } else {
 	  response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + colorIdentity);
 	 }
-	  }
 	  const cardContent = await response.json(); //extract JSON from the http response
 	  let card = {content: cardContent, status: "Shown", id: cardId}
+	  console.log(card);
 	  if (!(commanderCards.find(existingCard => (existingCard.content.name == card.content.name))) || card.content.type_line.includes("Basic")) {
 		  cardId += 1;
 		  commanderCards.push(card);
