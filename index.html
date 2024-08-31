@@ -1418,34 +1418,113 @@ document.getElementById("commanderButton").onclick=async() => {
   commanderCards.length = 0;
   cardId = 0;
   document.getElementById("commanderButton").disabled = true;
-  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander');
+  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander -t:background');
   const commanderContent = await commanderResponse.json(); //extract JSON from the http response
   let commander = {content: commanderContent, status: "Shown", id: cardId}
-  console.log(commander);
   cardId += 1;
   commanderCards.push(commander);
+  drawTables();
   colorIdentity = "c";
+  colorIdentity2 = "";
+  totalColorIdentity = "c";
   if (commander.content.color_identity.length > 0) {
-   colorIdentity = commander.content.color_identity.join("")
+   colorIdentity = commander.content.color_identity.join("");
+   totalColorIdentity = colorIdentity;
+  }
+  synergyResponse = await fetch('https://json.edhrec.com/pages/commanders/' + commander.content.scryfall_uri.split("/")[commander.content.scryfall_uri.split("/").length -1].split("?")[0] + '.json');
+  const synergyContent = await synergyResponse.json();
+  synergyCards = [];
+  if (synergyContent.hasOwnProperty("container")){
+	  synergyObject = synergyContent.container.json_dict.cardlists.find(cardList => (cardList.tag == "highsynergycards"));
+	  if (synergyObject && synergyObject.hasOwnProperty("cardviews")){
+		synergyCards = synergyCards.concat(synergyObject["cardviews"]);
+       }
+  }
+  if (commander.content.keywords.includes("Partner") && ! commander.content.keywords.includes("Partner with")) {
+	 colorIdentity2 = "c";
+	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander o:partner -o:"partner with"');
+	 const partnerContent = await partnerResponse.json(); 
+	 let partner = {content: partnerContent, status: "Shown", id: cardId}
+	  cardId += 1;
+	  commanderCards.push(partner);
+	  drawTables();
+	  if (partner.content.color_identity.length > 0) {
+	   colorIdentity2 = partner.content.color_identity.join("")
+	   totalColorIdentity = merge(commander.content.color_identity, partner.content.color_identity).join("");
+	  }
+	  partnerSynergyResponse = await fetch('https://json.edhrec.com/pages/commanders/' + partner.content.scryfall_uri.split("/")[partner.content.scryfall_uri.split("/").length -1].split("?")[0] + '.json');
+	  const partnerSynergyContent = await partnerSynergyResponse.json();
+	  if (partnerSynergyContent.hasOwnProperty("container")){
+		  partnerSynergyObject = partnerSynergyContent.container.json_dict.cardlists.find(cardList => (cardList.tag == "highsynergycards"));
+		  if (partnerSynergyObject && partnerSynergyObject.hasOwnProperty("cardviews")){
+			synergyCards = synergyCards.concat(partnerSynergyObject["cardviews"]);
+		   }
+	  }
+  } 
+  if (commander.content.keywords.includes("Doctor's companion")) {
+	 colorIdentity2 = "c";
+	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander t:doctor');
+	 const partnerContent = await partnerResponse.json(); 
+	 let partner = {content: partnerContent, status: "Shown", id: cardId}
+	  cardId += 1;
+	  commanderCards.push(partner);
+	  drawTables();
+	  if (partner.content.color_identity.length > 0) {
+	   colorIdentity2 = partner.content.color_identity.join("")
+	   totalColorIdentity = merge(commander.content.color_identity, partner.content.color_identity).join("");
+	  }
+	  partnerSynergyResponse = await fetch('https://json.edhrec.com/pages/commanders/' + partner.content.scryfall_uri.split("/")[partner.content.scryfall_uri.split("/").length -1].split("?")[0] + '.json');
+	  const partnerSynergyContent = await partnerSynergyResponse.json();
+	  if (partnerSynergyContent.hasOwnProperty("container")){
+		  partnerSynergyObject = partnerSynergyContent.container.json_dict.cardlists.find(cardList => (cardList.tag == "highsynergycards"));
+		  if (partnerSynergyObject && partnerSynergyObject.hasOwnProperty("cardviews")){
+			synergyCards = synergyCards.concat(partnerSynergyObject["cardviews"]);
+		   }
+	  }
+  }
+  if (commander.content.keywords.includes("Choose a background")) {
+	 colorIdentity2 = "c";
+	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander t:background');
+	 const partnerContent = await partnerResponse.json(); 
+	 let partner = {content: partnerContent, status: "Shown", id: cardId}
+	  cardId += 1;
+	  commanderCards.push(partner);
+	  drawTables();
+	  if (partner.content.color_identity.length > 0) {
+	   colorIdentity2 = partner.content.color_identity.join("")
+	   totalColorIdentity = merge(commander.content.color_identity, partner.content.color_identity).join("");
+	  }
+	  partnerSynergyResponse = await fetch('https://json.edhrec.com/pages/commanders/' + partner.content.scryfall_uri.split("/")[partner.content.scryfall_uri.split("/").length -1].split("?")[0] + '.json');
+	  const partnerSynergyContent = await partnerSynergyResponse.json();
+	  if (partnerSynergyContent.hasOwnProperty("container")){
+		  partnerSynergyObject = partnerSynergyContent.container.json_dict.cardlists.find(cardList => (cardList.tag == "highsynergycards"));
+		  if (partnerSynergyObject && partnerSynergyObject.hasOwnProperty("cardviews")){
+			synergyCards = synergyCards.concat(partnerSynergyObject["cardviews"]);
+		   }
+	  }
   }
   while (commanderCards.length < 100) {
-		let response;
-	  if (commanderCards.length < 62) {
-		 response = await fetch('https://api.scryfall.com/cards/random?q=-t:land f:commander id<=' + colorIdentity);
+	  let response;
+	  if (commanderCards.length < 5 && synergyCards.length > 0) {
+	     synergyCardIndex = Math.floor(Math.random()*synergyCards.length)
+	     var cardName = synergyCards[synergyCardIndex]["name"];
+		 synergyCards.splice(synergyCardIndex, synergyCardIndex);
+		 response = await fetch('https://api.scryfall.com/cards/named?exact=' + cardName);
+	  }  else if (commanderCards.length < 62) {
+		 response = await fetch('https://api.scryfall.com/cards/random?q=-t:land -t:attraction -t:stickers f:commander id<=' + totalColorIdentity);
 	  } else if (commanderCards.length < 77) {
-		  if (colorIdentity == "c") {
-		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id<=' + colorIdentity);
+		  if (totalColorIdentity == "c") {
+		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id<=' + totalColorIdentity);
 		  } else {
-		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id>c id<=' + colorIdentity);
+		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id>c id<=' + totalColorIdentity);
 		  }
-	} else if (commanderCards.length < 92 && colorIdentity != "c") {
-	   response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id>c id<=' + colorIdentity);
+	} else if (commanderCards.length < 92 && totalColorIdentity != "c") {
+	   response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id>c id<=' + totalColorIdentity);
 	 } else {
-	  response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + colorIdentity);
+	  response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + totalColorIdentity);
 	 }
 	  const cardContent = await response.json(); //extract JSON from the http response
 	  let card = {content: cardContent, status: "Shown", id: cardId}
-	  console.log(card);
 	  if (!(commanderCards.find(existingCard => (existingCard.content.name == card.content.name))) || card.content.type_line.includes("Basic")) {
 		  cardId += 1;
 		  commanderCards.push(card);
@@ -1462,6 +1541,13 @@ document.getElementById("restoreButton").onclicka = function()  {
   });
   drawTables();
 };
+
+const merge = (a, b, predicate = (a, b) => a === b) => {
+    const c = [...a]; // copy to avoid side effects
+    // add all items from B to copy C if they're not already present
+    b.forEach((bItem) => (c.some((cItem) => predicate(bItem, cItem)) ? null : c.push(bItem)))
+    return c;
+}
 
 
 
