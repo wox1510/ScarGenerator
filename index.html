@@ -1266,7 +1266,6 @@ function drawCommanderTable()
 		  rerollResponse = await fetch('https://api.scryfall.com/cards/random?q=' + card.reroll);
 		  const rerollContent = await rerollResponse.json(); 
 		  let rerollCard = {content: rerollContent, status: "Shown", id: card.id, reroll: card.reroll}
-		  console.log(rerollCard);
 		  if (!(commanderCards.find(existingCard => (existingCard.content.name == rerollCard.content.name))) || rerollCard.content.type_line.includes("Basic")) {
 		    cardfound = true;
 			commanderCards[card.id] = rerollCard;
