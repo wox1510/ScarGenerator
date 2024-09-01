@@ -1256,6 +1256,23 @@ function drawCommanderTable()
 	};
 	showFrontButton.setAttribute('style','height:50px;width:100px;');
 	
+	var rerollButton = document.createElement('button');
+  	rerollButton.data =  "Reroll";
+  	rerollButton.innerHTML = "Reroll";
+	rerollButton.size="large";
+  	rerollButton.onclick = async function (){
+	  rerollResponse = await fetch('https://api.scryfall.com/cards/random?q=' + card.reroll);
+	  const rerollContent = await rerollResponse.json(); 
+	  let rerollCard = {content: rerollContent, status: "Shown", id: card.id, reroll: card.reroll}
+	  commanderCards[card.id] = rerollCard;
+	  drawTables();
+	};
+	rerollButton.setAttribute('style','height:50px;width:100px;');
+	
+	if (card.reroll != "") {
+	  footerDiv.appendChild(rerollButton);
+	}
+	
 	if (card.status == "Hidden") {
 	  footerDiv.appendChild(revealButton);
 	} else if (card.status == "Shown") {
@@ -1420,7 +1437,7 @@ document.getElementById("commanderButton").onclick=async() => {
   document.getElementById("commanderButton").disabled = true;
   const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander -t:background');
   const commanderContent = await commanderResponse.json(); //extract JSON from the http response
-  let commander = {content: commanderContent, status: "Shown", id: cardId}
+  let commander = {content: commanderContent, status: "Shown", id: cardId, reroll: ""}
   cardId += 1;
   commanderCards.push(commander);
   drawTables();
@@ -1444,7 +1461,7 @@ document.getElementById("commanderButton").onclick=async() => {
 	 colorIdentity2 = "c";
 	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander o:partner -o:"partner with"');
 	 const partnerContent = await partnerResponse.json(); 
-	 let partner = {content: partnerContent, status: "Shown", id: cardId}
+	 let partner = {content: partnerContent, status: "Shown", id: cardId, reroll: ""}
 	  cardId += 1;
 	  commanderCards.push(partner);
 	  drawTables();
@@ -1465,7 +1482,7 @@ document.getElementById("commanderButton").onclick=async() => {
 	 colorIdentity2 = "c";
 	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander t:doctor');
 	 const partnerContent = await partnerResponse.json(); 
-	 let partner = {content: partnerContent, status: "Shown", id: cardId}
+	 let partner = {content: partnerContent, status: "Shown", id: cardId, reroll: ""}
 	  cardId += 1;
 	  commanderCards.push(partner);
 	  drawTables();
@@ -1486,7 +1503,7 @@ document.getElementById("commanderButton").onclick=async() => {
 	 colorIdentity2 = "c";
 	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander t:background');
 	 const partnerContent = await partnerResponse.json(); 
-	 let partner = {content: partnerContent, status: "Shown", id: cardId}
+	 let partner = {content: partnerContent, status: "Shown", id: cardId, reroll: ""}
 	  cardId += 1;
 	  commanderCards.push(partner);
 	  drawTables();
@@ -1505,26 +1522,32 @@ document.getElementById("commanderButton").onclick=async() => {
   }
   while (commanderCards.length < 100) {
 	  let response;
+	  let query = "";
 	  if (commanderCards.length < 5 && synergyCards.length > 0) {
 	     synergyCardIndex = Math.floor(Math.random()*synergyCards.length)
 	     var cardName = synergyCards[synergyCardIndex]["name"];
 		 synergyCards.splice(synergyCardIndex, synergyCardIndex);
 		 response = await fetch('https://api.scryfall.com/cards/named?exact=' + cardName);
 	  }  else if (commanderCards.length < 62) {
-		 response = await fetch('https://api.scryfall.com/cards/random?q=-t:land -t:attraction -t:stickers f:commander id<=' + totalColorIdentity);
+	     query = '-t:land -t:attraction -t:stickers f:commander id<=' + totalColorIdentity
+		 response = await fetch('https://api.scryfall.com/cards/random?q=' + query);
 	  } else if (commanderCards.length < 77) {
 		  if (totalColorIdentity == "c") {
-		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id<=' + totalColorIdentity);
+		   query = 't:basic t:land f:commander id<=' + totalColorIdentity
+		   response = await fetch('https://api.scryfall.com/cards/random?q=' + query);
 		  } else {
-		   response = await fetch('https://api.scryfall.com/cards/random?q=t:basic t:land f:commander id>c id<=' + totalColorIdentity);
+		   query = 't:basic t:land f:commander id>c id<=' + totalColorIdentity
+		   response = await fetch('https://api.scryfall.com/cards/random?q=' + query);
 		  }
 	} else if (commanderCards.length < 92 && totalColorIdentity != "c") {
-	   response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id>c id<=' + totalColorIdentity);
+	   query = 't:land f:commander id>c id<=' + totalColorIdentity
+	   response = await fetch('https://api.scryfall.com/cards/random?q=' + query);
 	 } else {
-	  response = await fetch('https://api.scryfall.com/cards/random?q=t:land f:commander id<=' + totalColorIdentity);
+	  query = 't:land f:commander id<=' + totalColorIdentity
+	  response = await fetch('https://api.scryfall.com/cards/random?q=' + query);
 	 }
 	  const cardContent = await response.json(); //extract JSON from the http response
-	  let card = {content: cardContent, status: "Shown", id: cardId}
+	  let card = {content: cardContent, status: "Shown", id: cardId, reroll: query}
 	  if (!(commanderCards.find(existingCard => (existingCard.content.name == card.content.name))) || card.content.type_line.includes("Basic")) {
 		  cardId += 1;
 		  commanderCards.push(card);
