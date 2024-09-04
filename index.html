@@ -1441,7 +1441,7 @@ document.getElementById("commanderButton").onclick=async() => {
   commanderCards.length = 0;
   cardId = 0;
   document.getElementById("commanderButton").disabled = true;
-  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander -t:background');
+  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander c:wubrg -t:background');
   const commanderContent = await commanderResponse.json(); //extract JSON from the http response
   let commander = {content: commanderContent, status: "Shown", id: cardId, reroll: ""}
   cardId += 1;
@@ -1547,6 +1547,18 @@ document.getElementById("commanderButton").onclick=async() => {
 		  }
 	} else if (commanderCards.length < 92 && totalColorIdentity != "c") {
 	   query = 't:land f:commander id>c id<=' + totalColorIdentity
+	   response = await fetch('https://api.scryfall.com/cards/random?q=' + query);
+	 } else if (commanderCards.length < 93 && totalColorIdentity.length >= 2) {
+	   query = 'o:"any color" t:land f:commander id<=' + totalColorIdentity
+	   response = await fetch('https://api.scryfall.com/cards/random?q=' + query);
+	 } else if (commanderCards.length < 94 && totalColorIdentity.length >= 3) {
+	   query = 'o:"any color" t:land f:commander id<=' + totalColorIdentity
+	   response = await fetch('https://api.scryfall.com/cards/random?q=' + query);
+	 } else if (commanderCards.length < 95 && totalColorIdentity.length >= 4) {
+	   query = 'o:"any color" t:land f:commander id<=' + totalColorIdentity
+	   response = await fetch('https://api.scryfall.com/cards/random?q=' + query);
+	 }  else if (commanderCards.length < 96 && totalColorIdentity.length >= 5) {
+	   query = 'o:"any color" t:land f:commander id<=' + totalColorIdentity
 	   response = await fetch('https://api.scryfall.com/cards/random?q=' + query);
 	 } else {
 	  query = 't:land f:commander id<=' + totalColorIdentity
