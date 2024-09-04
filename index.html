@@ -1441,7 +1441,7 @@ document.getElementById("commanderButton").onclick=async() => {
   commanderCards.length = 0;
   cardId = 0;
   document.getElementById("commanderButton").disabled = true;
-  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander -t:background');
+  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander f:commander -t:background');
   const commanderContent = await commanderResponse.json(); //extract JSON from the http response
   let commander = {content: commanderContent, status: "Shown", id: cardId, reroll: ""}
   cardId += 1;
@@ -1465,7 +1465,7 @@ document.getElementById("commanderButton").onclick=async() => {
   }
   if (commander.content.keywords.includes("Partner") && ! commander.content.keywords.includes("Partner with")) {
 	 colorIdentity2 = "c";
-	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander o:partner -o:"partner with"');
+	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander f:commander o:partner -o:"partner with"');
 	 const partnerContent = await partnerResponse.json(); 
 	 let partner = {content: partnerContent, status: "Shown", id: cardId, reroll: ""}
 	  cardId += 1;
@@ -1486,7 +1486,7 @@ document.getElementById("commanderButton").onclick=async() => {
   } 
   if (commander.content.keywords.includes("Doctor's companion")) {
 	 colorIdentity2 = "c";
-	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander t:doctor');
+	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander f:commander t:doctor');
 	 const partnerContent = await partnerResponse.json(); 
 	 let partner = {content: partnerContent, status: "Shown", id: cardId, reroll: ""}
 	  cardId += 1;
@@ -1507,7 +1507,7 @@ document.getElementById("commanderButton").onclick=async() => {
   }
   if (commander.content.keywords.includes("Choose a background")) {
 	 colorIdentity2 = "c";
-	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander t:background');
+	 partnerResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander f:commander t:background');
 	 const partnerContent = await partnerResponse.json(); 
 	 let partner = {content: partnerContent, status: "Shown", id: cardId, reroll: ""}
 	  cardId += 1;
