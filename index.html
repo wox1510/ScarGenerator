@@ -1441,7 +1441,7 @@ document.getElementById("commanderButton").onclick=async() => {
   commanderCards.length = 0;
   cardId = 0;
   document.getElementById("commanderButton").disabled = true;
-  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander c:wubrg -t:background');
+  const commanderResponse = await fetch('https://api.scryfall.com/cards/random?q=is:commander -t:background');
   const commanderContent = await commanderResponse.json(); //extract JSON from the http response
   let commander = {content: commanderContent, status: "Shown", id: cardId, reroll: ""}
   cardId += 1;
